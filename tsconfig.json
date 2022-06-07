@@ -2,12 +2,15 @@
   "extends": "./tools/config/tsconfig.cli.json",
   "compilerOptions": {
     "paths": {
-      "@firestitch/content-widget": [
+      "@firestitch/content": [
         "src/public_api.ts"
       ],
       "@env": [
         "playground/environments/environment.ts"
       ]
-    }
+    } 
+  },
+  "angularCompilerOptions": {
+    "strictTemplates": true,
   }
 }

@@ -1,0 +1,62 @@
+<form fsForm [submit]="save" *fsSkeletonForm="contentPage">
+  <fs-dialog>
+    <h1 mat-dialog-title>{{contentPage.id ? 'Page' : 'Create Page'}}</h1>
+    <div mat-dialog-content>
+      <div fxLayout="column">
+        <mat-form-field>
+          <mat-select
+            [(ngModel)]="contentPage.type"
+            name="type"
+            required
+            placeholder="Type">
+              <mat-option
+                *ngFor="let item of PageTypes"
+                [value]="item.value">
+                  {{ item.name }}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            [(ngModel)]="contentPage.name"
+            name="name"
+            required
+            placeholder="Name">
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            [(ngModel)]="contentPage.path"
+            name="path"
+            placeholder="Path">
+        </mat-form-field>
+        <mat-form-field>
+          <input
+            matInput
+            [(ngModel)]="contentPage.title"
+            name="title"
+            placeholder="Title">
+        </mat-form-field>
+        <mat-form-field *ngIf="contentLayouts">
+          <mat-select
+            [(ngModel)]="contentPage.contentLayoutId"
+            required
+            name="contentLayoutId"
+            placeholder="Layout">
+              <mat-option
+                *ngFor="let item of contentLayouts"
+                [value]="item.id">
+                  {{ item.name }}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div mat-dialog-actions>
+      <fs-form-dialog-actions>
+      </fs-form-dialog-actions>
+    </div>
+  </fs-dialog>
+</form>

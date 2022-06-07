@@ -1,0 +1,17 @@
+<fs-list [config]="listConfig">
+  <fs-list-column name="design" width="1%">
+    <ng-template fs-list-cell let-row="row">
+      <a (click)="openEditor(row)"><mat-icon>design_services</mat-icon></a>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column name="name" title="Name" [sortable]="true">
+    <ng-template fs-list-cell let-row="row">
+      <a (click)="openLayout(row)">{{row.name}}</a>
+    </ng-template>
+  </fs-list-column>
+  <fs-list-column name="modify_date" title="Modified" [sortable]="true">
+    <ng-template fs-list-cell let-row="row">
+      {{row.modifyDate | fsDate: 'date-time-yearless'}}
+    </ng-template>
+  </fs-list-column>
+</fs-list>

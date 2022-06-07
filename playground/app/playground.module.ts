@@ -6,7 +6,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { FsExampleModule } from '@firestitch/example';
 import { FsMessageModule } from '@firestitch/message';
-import { FsContentWidgetsModule, FsContentWidgetModule } from '@firestitch/content-widget';
+import { 
+  FsContentPagesModule, 
+  FS_CONTENT_CONFIG,
+  FsContentLayoutsModule,
+  FsContentModule,
+} from '@firestitch/content';
 import { FsLabelModule } from '@firestitch/label';
 import { FsStoreModule } from '@firestitch/store';
 import { FsHtmlEditorModule } from '@firestitch/html-editor';
@@ -14,15 +19,13 @@ import { FsHtmlEditorModule } from '@firestitch/html-editor';
 import { ToastrModule } from 'ngx-toastr';
 
 import { AppMaterialModule } from './material.module';
-import {
-  ExamplesComponent
-} from './components';
+import { ExamplesComponent } from './components';
 import { AppComponent } from './app.component';
-import { ContentWidgetsComponent } from './components/content-widgets';
-import { FS_CONTENT_WIDGET_CONFIG } from 'src/app/content-widget/injectors';
-import { contentWidgetConfigFactory } from './helpers/content-widget-config-factory';
-import { ContentWidgetComponent } from './components/content-widget';
+import { contentConfigFactory } from './helpers/content-config-factory';
+import { ContentComponent } from './components/content';
 import { MonacoEditorModule } from 'ngx-monaco-editor';
+import { ContentPagesComponent } from './components/content-pages';
+import { ContentLayoutsComponent } from './components/content-layouts';
 
 
 const routes: Routes = [
@@ -33,9 +36,10 @@ const routes: Routes = [
   bootstrap: [ AppComponent ],
   imports: [
     BrowserModule,
-    FsContentWidgetsModule,
-    FsContentWidgetModule,
+    FsContentPagesModule,
+    FsContentLayoutsModule,
     BrowserAnimationsModule,
+    FsContentModule,
     AppMaterialModule,
     FormsModule,
     FsLabelModule,
@@ -48,16 +52,17 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
   ],
   providers: [
-    { provide: FS_CONTENT_WIDGET_CONFIG, 
-      useFactory: contentWidgetConfigFactory, 
+    { provide: FS_CONTENT_CONFIG, 
+      useFactory: contentConfigFactory, 
       deps: [ ] 
     },
   ],
   declarations: [
     AppComponent,
     ExamplesComponent,
-    ContentWidgetsComponent,
-    ContentWidgetComponent,
+    ContentPagesComponent,
+    ContentComponent,
+    ContentLayoutsComponent,
   ],
 })
 export class PlaygroundModule {

@@ -1,0 +1,42 @@
+<form fsForm [submit]="save">
+  <fs-dialog>
+    <h1 mat-dialog-title>Design</h1>
+    <div mat-dialog-content>
+      <div class="container">
+        <div class="toggles">
+          <mat-button-toggle-group multiple>
+            <mat-button-toggle value="content" [checked]="editors.content" (change)="editorToggleChange($event)">Content</mat-button-toggle>
+            <mat-button-toggle value="styles" [checked]="editors.styles" (change)="editorToggleChange($event)">Styles</mat-button-toggle>
+          </mat-button-toggle-group>      
+        </div>
+        <div class="editors">
+          <div class="editor" *ngIf="editors.content">
+            <fs-label>Content</fs-label>
+            <div class="editor-container">
+              <fs-text-editor 
+                [(ngModel)]="content" 
+                name="content"
+                [config]="{ tabSize: 2, language: 'html' }">
+              </fs-text-editor>              
+            </div>
+          </div>
+          <div class="editor" *ngIf="editors.styles">
+            <fs-label>Styles</fs-label>
+            <div class="editor-container">
+              <fs-text-editor 
+                [(ngModel)]="styles" 
+                name="styles"
+                [config]="{  tabSize: 2, language: 'scss' }">
+              </fs-text-editor>    
+            </div>
+          </div>    
+        </div>
+      </div>
+    </div>
+
+    <div mat-dialog-actions>
+      <fs-form-dialog-actions>
+      </fs-form-dialog-actions>
+    </div>
+  </fs-dialog>
+</form>

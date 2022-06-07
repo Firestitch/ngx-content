@@ -1,8 +1,13 @@
-export { FsContentWidgetsModule } from './app/content-widgets/fs-content-widgets.module';
-export { FsContentWidgetModule } from './app/content-widget/fs-content-widget.module';
-export { FsContentWidgetConfig } from './app/content-widget/interfaces/content-widget-config';
+export { FsContentPagesModule } from './app/modules/content-pages/fs-content-pages.module';
+export { FsContentLayoutsModule } from './app/modules/content-layouts/fs-content-layouts.module';
+export { FsContentModule } from './app/modules/content/fs-content.module';
 
-export { FsContentWidgetsComponent } from './app/content-widgets/components/content-widgets/content-widgets.component';
-export { FsContentWidgetComponent } from './app/content-widget/components/content-widget/content-widget.component';
+export { FsContentPagesComponent } from './app/modules/content-pages/components/content-pages/content-pages.component';
+export { FsContentLayoutsComponent } from './app/modules/content-layouts/components/content-layouts/content-layouts.component';
+export { FsContentComponent } from './app/modules/content/components/content/content.component';
 
-export { FS_CONTENT_WIDGET_CONFIG } from './app/content-widget/injectors/content-wiget.injector';
+export { FS_CONTENT_CONFIG } from './app/injectors/content-config.injector';
+
+export { FsContentConfig } from './app/interfaces/content-config';
+export { FsContentPage } from './app/interfaces/content-page';
+export { FsContentLayout } from './app/interfaces/content-layout';
