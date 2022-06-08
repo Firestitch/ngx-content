@@ -53,7 +53,7 @@ export class FsContentLayoutsComponent implements OnInit, OnDestroy {
           styles: contentLayout.styles,
           content: contentLayout.content,
           save: (data) => {
-            return this._config.saveContentPage({
+            return this._config.saveContentLayout({
               id: contentLayout.id,
               ...data,
             });
