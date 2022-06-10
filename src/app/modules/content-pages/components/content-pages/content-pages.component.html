@@ -11,7 +11,7 @@
   </fs-list-column>
   <fs-list-column name="path" title="Path" [sortable]="true">
     <ng-template fs-list-cell let-row="row">
-      /{{row.path}}
+      <a [href]="'/' + row.path" target="_black">/{{row.path}}</a>
     </ng-template>
   </fs-list-column>
   <fs-list-column name="type" title="Type" [sortable]="true">

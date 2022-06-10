@@ -108,7 +108,7 @@ export function contentConfigFactory(): FsContentConfig {
     loadContent: (path: string) => {
       return of({
         content: "<h1>Contact us</h1>",
-        styles: "h1 { color: #dddddd; }",
+        styles: "",
         title: 'Contact Us', 
       });
     },
