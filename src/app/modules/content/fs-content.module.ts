@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FsHtmlEditorModule } from '@firestitch/html-editor';
 
 import { FsContentComponent } from './components/content';
-import { ContentRendererComponent } from './components/content- renderer';
+import { ContentRendererComponent } from './components/content-renderer';
 
 
 

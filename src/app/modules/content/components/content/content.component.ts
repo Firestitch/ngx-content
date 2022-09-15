@@ -54,7 +54,19 @@ export class FsContentComponent implements OnInit, OnDestroy {
     const path = (window as any).location.pathname;
     this._config.loadContent(path)
       .subscribe((contentPage) => {
-        this._title.setTitle(contentPage.title);
+        if(contentPage.title) {
+          this._title.setTitle(contentPage.title);
+
+          let ogTitleEl = document.querySelector('head meta[property="og:title"]');
+          if(!ogTitleEl) {
+            ogTitleEl = document.createElement('meta');
+            ogTitleEl.setAttribute('property','og:title');
+            document.getElementsByTagName('head')[0].appendChild(ogTitleEl);
+          }
+
+          ogTitleEl.setAttribute('content',contentPage.title);
+        }
+
         this.contentPage = contentPage;
         this._cdRef.markForCheck();
       });
