@@ -16,16 +16,14 @@ import { FsLabelModule } from '@firestitch/label';
 import { FsStoreModule } from '@firestitch/store';
 import { FsHtmlEditorModule } from '@firestitch/html-editor';
 
-import { ToastrModule } from 'ngx-toastr';
-
 import { AppMaterialModule } from './material.module';
 import { ExamplesComponent } from './components';
 import { AppComponent } from './app.component';
 import { contentConfigFactory } from './helpers/content-config-factory';
 import { ContentComponent } from './components/content';
-import { MonacoEditorModule } from 'ngx-monaco-editor';
 import { ContentPagesComponent } from './components/content-pages';
 import { ContentLayoutsComponent } from './components/content-layouts';
+import { FsTextEditorModule } from '@firestitch/text-editor';
 
 
 const routes: Routes = [
@@ -44,11 +42,10 @@ const routes: Routes = [
     FormsModule,
     FsLabelModule,
     FsStoreModule,
-    MonacoEditorModule.forRoot(),
     FsExampleModule.forRoot(),
     FsHtmlEditorModule.forRoot(),
+    FsTextEditorModule.forRoot(),
     FsMessageModule.forRoot(),
-    ToastrModule.forRoot({ preventDuplicates: true }),
     RouterModule.forRoot(routes),
   ],
   providers: [
