@@ -22,6 +22,7 @@
               <fs-text-editor 
                 #contentEditor
                 [(ngModel)]="contentPage.content" 
+                (blur)="contentChanged()"
                 name="content"
                 [config]="{ tabSize: 2, language: 'html' }">
               </fs-text-editor>              
@@ -30,6 +31,7 @@
           <div  
             #separator
             class="separator">
+            <mat-icon>drag_indicator</mat-icon>
           </div>
           <div 
               #styleContainer 
@@ -41,6 +43,7 @@
               <fs-text-editor 
                 #styleEditor
                 [(ngModel)]="contentPage.styles" 
+                (blur)="stylesChanged()"
                 name="styles"
                 [config]="{  tabSize: 2, language: 'scss' }">
               </fs-text-editor>    
@@ -51,7 +54,9 @@
     </div>
 
     <div mat-dialog-actions>
-      <fs-form-dialog-actions>
+      <fs-form-dialog-actions
+        [save]="false"
+        [done]="true">
       </fs-form-dialog-actions>
       <div class="toggles">
         <mat-button-toggle-group multiple>

@@ -19,6 +19,7 @@ import { Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 
 import { PageTypes } from '../../../../consts';
+import { PageType } from '../../../../enums';
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
 import { EditorComponent } from '../../../editor/components/editor';
@@ -94,7 +95,9 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
           click: () => {
             this._dialog.open(ContentPageComponent, {
               data: {
-                contentPage: {},
+                contentPage: {
+                  type: PageType.StandardPage,
+                },
               },
             })
               .afterClosed()

@@ -12,6 +12,7 @@ import {
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
+import { FsFormDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
 import { FsTextEditorComponent } from '@firestitch/text-editor';
 
@@ -28,6 +29,9 @@ import { ContentPageComponent } from '../../../content-pages/components/content-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditorComponent implements OnInit, OnDestroy {
+
+  @ViewChild(FsFormDirective)
+  public form: FsFormDirective;
 
   @ViewChild('styleEditor')
   public styleEditor: FsTextEditorComponent;
@@ -87,10 +91,27 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
+  public stylesChanged() {
+    this.form.triggerSubmit();
+  }
+
+  public contentChanged() {
+    this.form.triggerSubmit();
+  }
+
   public save = () => {
-    return this._config.saveContentPage(this.contentPage)
+    return this._config.saveContentPage({
+      id: this.contentPage.id,
+      styles: this.contentPage.styles,
+      content: this.contentPage.content,
+    })
       .pipe(
-        tap(() => {
+        tap((contentPage) => {
+          this.contentPage = {
+            ...this.contentPage,
+            ...contentPage,
+          };
+          this._cdRef.markForCheck();
           this._message.success('Saved Changes');
         }),
       );

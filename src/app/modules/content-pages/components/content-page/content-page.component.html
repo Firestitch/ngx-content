@@ -5,13 +5,26 @@
       <div class="fs-column">
         <mat-form-field>
           <mat-select
-            [(ngModel)]="contentPage.type"
-            name="type"
-            required
-            placeholder="Type">
-              <mat-option
+              [(ngModel)]="contentPage.type"
+              name="type"
+              required
+              placeholder="Type">
+            <mat-option
                 *ngFor="let item of PageTypes"
                 [value]="item.value">
+              {{ item.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field *ngIf="contentLayouts">
+          <mat-select
+            [(ngModel)]="contentPage.contentLayoutId"
+            required
+            name="contentLayoutId"
+            placeholder="Layout">
+              <mat-option
+                *ngFor="let item of contentLayouts"
+                [value]="item.id">
                   {{ item.name }}
               </mat-option>
           </mat-select>
@@ -29,6 +42,7 @@
             matInput
             [(ngModel)]="contentPage.path"
             name="path"
+            required
             placeholder="Path">
         </mat-form-field>
         <mat-form-field>
@@ -37,19 +51,6 @@
             [(ngModel)]="contentPage.title"
             name="title"
             placeholder="Title">
-        </mat-form-field>
-        <mat-form-field *ngIf="contentLayouts">
-          <mat-select
-            [(ngModel)]="contentPage.contentLayoutId"
-            required
-            name="contentLayoutId"
-            placeholder="Layout">
-              <mat-option
-                *ngFor="let item of contentLayouts"
-                [value]="item.id">
-                  {{ item.name }}
-              </mat-option>
-          </mat-select>
         </mat-form-field>
       </div>
     </div>
