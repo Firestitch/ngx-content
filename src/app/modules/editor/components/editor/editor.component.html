@@ -3,7 +3,7 @@
     <h1 mat-dialog-title>
       <div class="title-container">
         <div class="title">
-          Page
+          {{title}}
           <div class="small">{{contentPage.name}}</div>   
         </div>
         <a
@@ -17,14 +17,14 @@
       <div class="container">
         <div class="editors" [ngClass]="{ resizing: resizing, 'separator-enabled': editors.styles && editors.content }">
           <div #contentContainer class="editor editor-content" [ngClass]="{ 'content-enabled': editors.content }">
-            <fs-label>Content</fs-label>
+            <fs-label>HTML</fs-label>
             <div class="editor-container">
               <fs-text-editor 
                 #contentEditor
                 [(ngModel)]="contentPage.content" 
                 (blur)="contentChanged()"
                 name="content"
-                [config]="{ tabSize: 2, language: 'html' }">
+                [config]="contentConfig">
               </fs-text-editor>              
             </div>
           </div>
@@ -38,14 +38,14 @@
               class="editor editor-styles" 
               [ngClass]="{ 'styles-enabled': editors.styles }"
               [style.width]="'600px'">
-            <fs-label>Styles</fs-label>
+            <fs-label>SCSS</fs-label>
             <div class="editor-container">
               <fs-text-editor 
                 #styleEditor
                 [(ngModel)]="contentPage.styles" 
                 (blur)="stylesChanged()"
                 name="styles"
-                [config]="{  tabSize: 2, language: 'scss' }">
+                [config]="stylesConfig">
               </fs-text-editor>    
             </div>
           </div>    

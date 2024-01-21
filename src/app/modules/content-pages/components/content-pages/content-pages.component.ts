@@ -58,6 +58,10 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
       data: {
         contentPage,
         config: this._config,
+        title: 'Page',
+        save: (data) => {
+          return this._config.saveContentPage(data);
+        },
       },
       maxWidth: '100vw',
       maxHeight:  '100vw',

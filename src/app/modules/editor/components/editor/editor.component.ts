@@ -14,12 +14,12 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 
 import { FsFormDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
-import { FsTextEditorComponent } from '@firestitch/text-editor';
+import { FsTextEditorComponent, FsTextEditorConfig } from '@firestitch/text-editor';
 
-import { Subject, fromEvent } from 'rxjs';
+import { Observable, Subject, fromEvent } from 'rxjs';
 import { finalize, take, takeUntil, tap } from 'rxjs/operators';
 
-import { FsContentConfig } from '../../../../interfaces';
+
 import { ContentPageComponent } from '../../../content-pages/components/content-page';
 
 
@@ -48,15 +48,28 @@ export class EditorComponent implements OnInit, OnDestroy {
   @ViewChild('styleContainer', { static: true, read: ElementRef })
   public styleContainer: ElementRef;
 
-  public contentPage;
-  public resizing = false;
-  public editors = { content: true, styles: true };
+  public contentPage: {
+    id?: number;
+    styles?: string;
+    content?: string;
+    name?: string;
+  };
 
-  private _config: FsContentConfig;
+  public resizing = false;
+  public title;
+  public editors = { content: true, styles: true };
+  public stylesConfig: FsTextEditorConfig;
+  public contentConfig: FsTextEditorConfig;
+
   private _destroy$ = new Subject<void>();
+  private _save: (data) => Observable<any>;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private _data: { contentPage: any; config: FsContentConfig },
+    @Inject(MAT_DIALOG_DATA) private _data: {
+      contentPage: any;
+      title: string;
+      save: (data) => Observable<any>;
+    },
     private _dialogRef: MatDialogRef<EditorComponent>,
     private _dialog: MatDialog,
     private _message: FsMessage,
@@ -64,8 +77,19 @@ export class EditorComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
+    this.stylesConfig = {
+      tabSize: 2,
+      language: 'scss',
+      height: '100%',
+    };
+    this.contentConfig = {
+      tabSize: 2,
+      language: 'html',
+      height: '100%',
+    };
+    this.title = this._data.title;
     this.contentPage = this._data.contentPage;
-    this._config = this._data.config;
+    this._save = this._data.save;
     this._initSeparator();
   }
 
@@ -100,7 +124,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public save = () => {
-    return this._config.saveContentPage({
+    return this._save({
       id: this.contentPage.id,
       styles: this.contentPage.styles,
       content: this.contentPage.content,

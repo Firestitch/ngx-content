@@ -7,10 +7,12 @@ form {
     flex-direction: column;
     height: 100%;    
   }
+  
   ::ng-deep {
     .mat-dialog-content {
       max-height: none;
       flex: 1;
+      overflow: hidden;
     }
   }
 }
@@ -70,6 +72,7 @@ form {
     min-width: 0;
     width: 100%;
     flex-direction: column;
+    flex-grow: 1;
     
     &.editor-styles:not(.styles-enabled),
     &.editor-content:not(.content-enabled) {
@@ -78,13 +81,8 @@ form {
 
     .editor-container {
       height: 100%;
-      overflow: hidden;
       background: #1E1E1E;
       border-radius: 5px;
-
-      fs-text-editor {
-        display: block;
-      }
     }
 
     + .editor {

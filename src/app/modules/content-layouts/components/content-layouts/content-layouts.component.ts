@@ -1,24 +1,24 @@
 import {
+  ChangeDetectionStrategy,
   Component,
+  Inject,
+  OnDestroy,
   OnInit,
   ViewChild,
-  ChangeDetectionStrategy,
-  OnDestroy,
-  Inject,
 } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { FsListComponent, FsListConfig } from '@firestitch/list';
 import { ItemType } from '@firestitch/filter';
+import { FsListComponent, FsListConfig } from '@firestitch/list';
 
-import { map, takeUntil, filter } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs/operators';
 
-import { ContentLayoutComponent } from '../../components/content-layout';
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
 import { EditorComponent } from '../../../editor/components/editor';
+import { ContentLayoutComponent } from '../../components/content-layout';
 
 
 @Component({
@@ -47,26 +47,28 @@ export class FsContentLayoutsComponent implements OnInit, OnDestroy {
 
   public openEditor(contentLayout: any): void {
     this._dialog.open(EditorComponent, {
-        maxWidth: null,
-        maxHeight: null,      
-        data: {
-          styles: contentLayout.styles,
-          content: contentLayout.content,
-          save: (data) => {
-            return this._config.saveContentLayout({
-              id: contentLayout.id,
-              ...data,
-            });
-          },
+      maxWidth: '100vw',
+      maxHeight:  '100vw',
+      width: '100%',
+      height: '100%',
+      data: {
+        contentPage: contentLayout,
+        title: 'Layout',
+        save: (data) => {
+          return this._config.saveContentLayout({
+            id: contentLayout.id,
+            ...data,
+          });
         },
-      })
-        .afterClosed()
-        .pipe(
-          takeUntil(this._destroy$),
-        )        
-        .subscribe(() => {
-          this.listComponent.reload();
-        });
+      },
+    })
+      .afterClosed()
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this.listComponent.reload();
+      });
   }
 
   public openLayout(contentLayout: any): void {
