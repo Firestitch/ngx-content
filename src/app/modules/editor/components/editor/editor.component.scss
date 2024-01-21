@@ -17,10 +17,9 @@ form {
 
 .toggles {
   display: flex;
-  align-self: end;
-  z-index: 1;
-  position: relative;
-  margin-bottom: -12px;
+  justify-content: flex-end;
+  justify-self: baseline;
+  flex: 1;
 }
 
 .container {
@@ -36,17 +35,45 @@ form {
   display: flex;
   min-height: 0;
 
+  &:not(.separator-enabled) {
+    .separator {
+      display: none;
+    }
+
+    .editor {
+      width: 100% !important;
+    }
+  }
+
+  .separator {
+    cursor: col-resize;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='30'><path d='M2 0 v30 M5 0 v30 M8 0 v30' fill='none' stroke='black'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px;
+    height: 100%;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
   .editor {
     height: 100%;
     display: flex;
     min-width: 0;
     width: 100%;
     flex-direction: column;
+    
+    &.editor-styles:not(.styles-enabled),
+    &.editor-content:not(.content-enabled) {
+      display: none;
+    }
 
     .editor-container {
       height: 100%;
-      overflow: auto;
+      overflow: hidden;
       background: #1E1E1E;
+      border-radius: 5px;
 
       fs-text-editor {
         display: block;
@@ -61,5 +88,14 @@ form {
       background-color: #fff;
       padding-bottom: 5px;
     }
+  }
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+
+  .title {
+    flex: 1;
   }
 }

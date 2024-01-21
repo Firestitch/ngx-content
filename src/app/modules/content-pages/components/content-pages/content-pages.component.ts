@@ -1,28 +1,28 @@
 import {
+  ChangeDetectionStrategy,
   Component,
+  Inject,
+  Input,
+  OnDestroy,
   OnInit,
   ViewChild,
-  ChangeDetectionStrategy,
-  OnDestroy,
-  Input,
-  Inject,
 } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { FsListComponent, FsListConfig } from '@firestitch/list';
-import { ItemType } from '@firestitch/filter';
 import { index } from '@firestitch/common';
+import { ItemType } from '@firestitch/filter';
 import { FsHtmlEditorConfig } from '@firestitch/html-editor';
+import { FsListComponent, FsListConfig } from '@firestitch/list';
 
-import { filter, map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { filter, map, takeUntil } from 'rxjs/operators';
 
 import { PageTypes } from '../../../../consts';
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
-import { ContentPageComponent } from '../content-page/content-page.component';
 import { EditorComponent } from '../../../editor/components/editor';
+import { ContentPageComponent } from '../content-page';
 
 
 @Component({
@@ -54,33 +54,15 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
 
   public openEditor(contentPage: any): void {
     this._dialog.open(EditorComponent, {
-      maxWidth: null,
-      maxHeight: null,
-      data: {
-        styles: contentPage.styles,
-        content: contentPage.content,
-        save: (data) => {
-          return this._config.saveContentPage({
-            id: contentPage.id,
-            ...data,
-          });
-        },     
-      },
-    })
-      .afterClosed()
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-    .subscribe(() => {
-      this.listComponent.reload();
-    });
-  }
-
-  public openPage(contentPage: any): void {
-    this._dialog.open(ContentPageComponent, {
       data: {
         contentPage,
+        config: this._config,
       },
+      maxWidth: '100vw',
+      maxHeight:  '100vw',
+      width: '100%',
+      height: '100%',
+      autoFocus: false,
     })
       .afterClosed()
       .pipe(
@@ -110,7 +92,20 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
         {
           label: 'Create',
           click: () => {
-            this.openPage({});
+            this._dialog.open(ContentPageComponent, {
+              data: {
+                contentPage: {},
+              },
+            })
+              .afterClosed()
+              .pipe(
+                filter((contentPage) => !!contentPage),
+                takeUntil(this._destroy$),
+              )
+              .subscribe((contentPage) => {
+                this.openEditor(contentPage);
+                this.listComponent.reload();
+              });
           },
         },
       ],

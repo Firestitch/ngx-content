@@ -1,30 +1,46 @@
 <form fsForm [submit]="save">
   <fs-dialog>
-    <h1 mat-dialog-title>Design</h1>
+    <h1 mat-dialog-title>
+      <div class="title-container">
+        <div class="title">
+          Page
+          <div class="small">{{contentPage.name}}</div>   
+        </div>
+        <a
+            (click)="openSettings()"
+            mat-icon-button>
+          <mat-icon>settings</mat-icon>
+        </a>   
+      </div>
+    </h1>
     <div mat-dialog-content>
       <div class="container">
-        <div class="toggles">
-          <mat-button-toggle-group multiple>
-            <mat-button-toggle value="content" [checked]="editors.content" (change)="editorToggleChange($event)">Content</mat-button-toggle>
-            <mat-button-toggle value="styles" [checked]="editors.styles" (change)="editorToggleChange($event)">Styles</mat-button-toggle>
-          </mat-button-toggle-group>      
-        </div>
-        <div class="editors">
-          <div class="editor" *ngIf="editors.content">
+        <div class="editors" [ngClass]="{ resizing: resizing, 'separator-enabled': editors.styles && editors.content }">
+          <div #contentContainer class="editor editor-content" [ngClass]="{ 'content-enabled': editors.content }">
             <fs-label>Content</fs-label>
             <div class="editor-container">
               <fs-text-editor 
-                [(ngModel)]="content" 
+                #contentEditor
+                [(ngModel)]="contentPage.content" 
                 name="content"
                 [config]="{ tabSize: 2, language: 'html' }">
               </fs-text-editor>              
             </div>
           </div>
-          <div class="editor" *ngIf="editors.styles">
+          <div  
+            #separator
+            class="separator">
+          </div>
+          <div 
+              #styleContainer 
+              class="editor editor-styles" 
+              [ngClass]="{ 'styles-enabled': editors.styles }"
+              [style.width]="'600px'">
             <fs-label>Styles</fs-label>
             <div class="editor-container">
               <fs-text-editor 
-                [(ngModel)]="styles" 
+                #styleEditor
+                [(ngModel)]="contentPage.styles" 
                 name="styles"
                 [config]="{  tabSize: 2, language: 'scss' }">
               </fs-text-editor>    
@@ -37,6 +53,13 @@
     <div mat-dialog-actions>
       <fs-form-dialog-actions>
       </fs-form-dialog-actions>
+      <div class="toggles">
+        <mat-button-toggle-group multiple>
+          <mat-button-toggle value="content" [checked]="editors.content" (change)="editorToggleChange($event)">Content</mat-button-toggle>
+          <mat-button-toggle value="styles" [checked]="editors.styles" (change)="editorToggleChange($event)">Styles</mat-button-toggle>
+        </mat-button-toggle-group>      
+      </div>
     </div>
   </fs-dialog>
 </form>
+
