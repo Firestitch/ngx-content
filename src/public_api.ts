@@ -10,7 +10,5 @@ export { FsContentComponent } from './app/modules/content/components/content/con
 
 export { FS_CONTENT_CONFIG } from './app/injectors/content-config.injector';
 
-export { FsContentConfig } from './app/interfaces/content-config';
-export { FsContentLayout } from './app/interfaces/content-layout';
-export { FsContentPage } from './app/interfaces/content-page';
+export * from './app/interfaces';
 
