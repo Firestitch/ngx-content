@@ -23,7 +23,7 @@ import { PageTypes } from '../../../../consts';
 import { PageType } from '../../../../enums';
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
-import { EditorComponent } from '../../../editor/components/editor';
+import { ContentPageEditorComponent } from '../content-page-editor';
 import { ContentPageComponent } from '../content-page/content-page.component';
 
 
@@ -55,18 +55,11 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
   }
 
   public openEditor(contentPage: any): void {
-    this._dialog.open(EditorComponent, {
+    this._dialog.open(ContentPageEditorComponent, {
       data: {
         contentPage,
         config: this._config,
-        title: 'Page',
         contentConfig: this._config,
-        save: (data) => {
-          return this._config.saveContentPage(data);
-        },
-        openSettings: (data) => {
-          return this.openContentPage(data);
-        },
       },
       maxWidth: '100vw',
       width: '100%',

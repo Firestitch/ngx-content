@@ -8,9 +8,11 @@ import { FsContentStyle } from './content-style';
 export interface FsContentConfig {
   loadContent: (path: string) => Observable<FsContentPage>;
   loadContentPages: (query: any) => Observable<{ contentPages: FsContentPage[]; paging: any }>;
+  loadContentPage: (contentPageId: number) => Observable<FsContentPage>;
   saveContentPage: (contentPage: FsContentPage) => Observable<FsContentPage>;
   deleteContentPage: (contentPage: FsContentPage) => Observable<FsContentPage>;
   loadContentLayouts: (query?: any) => Observable<FsContentLayout[]>;
+  loadContentLayout: (contentLayoutId) => Observable<FsContentLayout>;
   loadContentStyleCss?: () => Observable<string>;
   loadContentStyle: () => Observable<FsContentStyle>;
   saveContentStyle: (contentStyle: FsContentStyle) => Observable<FsContentStyle>;

@@ -1,87 +1,52 @@
-<fs-dialog>
-  <h1 mat-dialog-title>
-    <div class="title-container">
-      <div class="title">
-        {{title}}
-        <div class="small">{{contentPage.name}}</div>   
-      </div>
-      <a
-          (click)="openSettings()"
-          mat-icon-button>
-        <mat-icon>settings</mat-icon>
-      </a>   
+<as-split [unit]="'percent'" [gutterSize]="25"> 
+  <as-split-area [size]="70" [visible]="showHtml" [order]="1">
+    <div class="editor-container">
+      <fs-label>HTML</fs-label>
+      <fs-text-editor 
+        [(ngModel)]="html" 
+        name="html"
+        [fsModelChangeOptions]="{ debounce: 300 }"
+        (fsModelChange)="changed.emit({ type: 'html', value: $event })"
+        [config]="htmlConfig">
+      </fs-text-editor>              
     </div>
-  </h1>
-  <div mat-dialog-content>
-    <div class="container">
-      <as-split [unit]="'percent'" [gutterSize]="25"> 
-        <as-split-area [size]="70" [visible]="editors.html" [order]="1">
-          <div class="editor-container">
-            <fs-label>HTML</fs-label>
-            <fs-text-editor 
-              [(ngModel)]="contentPage.content" 
-              name="html"
-              [fsModelChangeOptions]="{ debounce: 300 }"
-              (fsModelChange)="saveContentPage()"
-              [config]="htmlConfig">
-            </fs-text-editor>              
-          </div>
-        </as-split-area>
-        <as-split-area [size]="30" [visible]="editors.scss" [order]="2">
-          <div class="editor-container">
-            <fs-label>SCSS</fs-label>
-            <fs-text-editor 
-              [(ngModel)]="contentPage.styles" 
-              name="scss"
-              [fsModelChangeOptions]="{ debounce: 300 }"
-              (fsModelChange)="saveContentPage()"
-              [config]="scssConfig">
-            </fs-text-editor>    
-          </div>
-        </as-split-area>
-        <as-split-area [size]="30"  [visible]="editors.js" [order]="3">
-          <div class="editor-container">
-            <fs-label>JS</fs-label>
-            <fs-text-editor 
-              [(ngModel)]="contentPage.js" 
-              name="js"
-              [fsModelChangeOptions]="{ debounce: 300 }"
-              (fsModelChange)="saveContentPage()"
-              [config]="jsConfig">
-            </fs-text-editor>    
-          </div>
-        </as-split-area>
-        <as-split-area [size]="30" [visible]="editors.globalScss" [order]="4">
-          <div class="editor-container">
-            <fs-label>Global SCSS</fs-label>
-            <ng-container *fsSkeleton="contentStyle">
-              <fs-text-editor 
-                [(ngModel)]="contentStyle.scss" 
-                name="globalScss"
-                [fsModelChangeOptions]="{ debounce: 300 }"
-                (fsModelChange)="globalScssChange()"
-                [config]="globalScssConfig">
-              </fs-text-editor> 
-            </ng-container>   
-          </div>
-        </as-split-area>
-      </as-split>
+  </as-split-area>
+  <as-split-area [size]="30" [visible]="showScss" [order]="2">
+    <div class="editor-container">
+      <fs-label>SCSS</fs-label>
+      <fs-text-editor 
+        [(ngModel)]="scss" 
+        name="scss"
+        [fsModelChangeOptions]="{ debounce: 300 }"
+        (fsModelChange)="changed.emit({ type: 'scss', value: $event })"
+        [config]="scssConfig">
+      </fs-text-editor>    
     </div>
-  </div>
-
-  <div mat-dialog-actions>
-    <fs-form-dialog-actions
-      [save]="false"
-      [done]="true">
-    </fs-form-dialog-actions>
-    <div class="toggles">
-      <mat-button-toggle-group multiple>
-        <mat-button-toggle value="html" [checked]="editors.html" (change)="editorToggleChange($event)">HTML</mat-button-toggle>
-        <mat-button-toggle value="scss" [checked]="editors.scss" (change)="editorToggleChange($event)">SCSS</mat-button-toggle>
-        <mat-button-toggle value="js" [checked]="editors.js" (change)="editorToggleChange($event)">JS</mat-button-toggle>
-        <mat-button-toggle value="globalScss" [checked]="editors.globalScss" (change)="editorToggleChange($event)">Global SCSS</mat-button-toggle>
-      </mat-button-toggle-group>      
+  </as-split-area>
+  <as-split-area [size]="30"  [visible]="showJs" [order]="3">
+    <div class="editor-container">
+      <fs-label>JS</fs-label>
+      <fs-text-editor 
+        [(ngModel)]="js" 
+        name="js"
+        [fsModelChangeOptions]="{ debounce: 300 }"
+        (fsModelChange)="changed.emit({ type: 'js', value: $event })"
+        [config]="jsConfig">
+      </fs-text-editor>    
     </div>
-  </div>
-</fs-dialog>
-
+  </as-split-area>
+  <as-split-area [size]="30" [visible]="showGlobalScss" [order]="4">
+    <div class="editor-container">
+      <fs-label>Global SCSS</fs-label>
+      <ng-container *fsSkeleton="contentStyle">
+        <fs-text-editor 
+          [(ngModel)]="contentStyle.scss" 
+          name="globalScss"
+          [fsModelChangeOptions]="{ debounce: 300 }"
+          (fsModelChange)="globalScssChange()"
+          [config]="globalScssConfig">
+        </fs-text-editor> 
+      </ng-container>   
+    </div>
+  </as-split-area>
+</as-split>

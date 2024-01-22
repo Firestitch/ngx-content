@@ -1,50 +1,8 @@
-::ng-deep {
-  .fs-content-editor-overlay-pane {
-    .mat-dialog-container {
-      border-radius: 0;
-    }   
-  }   
-}
-
 :host ::ng-deep {
   .as-split-gutter {
     background-color: unset !important;
   }
 }
-
-fs-dialog {
-  display: flex;
-  height: 100%;
-  flex-direction: column;  
-
-  ::ng-deep {
-    .mat-dialog-content {
-      max-height: none;
-      flex: 1;
-      overflow: hidden;
-    }
-  }
-}
-
-.mat-dialog-actions {
-  fs-form-dialog-actions {
-    width: auto;
-  }
-
-  .toggles {
-    display: flex;
-    justify-content: flex-end;
-    justify-self: baseline;
-    flex: 1;
-  }
-}
-
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
 
 .editor-container {
   height: 100%;
@@ -54,18 +12,5 @@ fs-dialog {
 
   fs-text-editor {
     flex: 1;
-  }
-}
-
-.title-container {
-  display: flex;
-  align-items: center;
-
-  .title {
-    flex: 1;
-
-    .small {
-      line-height: normal;
-    }
   }
 }

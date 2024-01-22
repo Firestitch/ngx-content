@@ -1,0 +1,47 @@
+::ng-deep {
+  .fs-content-editor-overlay-pane {
+    .mat-dialog-container {
+      border-radius: 0;
+    }   
+  }   
+}
+
+fs-dialog {
+  display: flex;
+  height: 100%;
+  flex-direction: column;  
+
+  ::ng-deep {
+    .mat-dialog-content {
+      max-height: none;
+      flex: 1;
+      overflow: hidden;
+    }
+  }
+}
+
+.mat-dialog-actions {
+  fs-form-dialog-actions {
+    width: auto;
+  }
+
+  .toggles {
+    display: flex;
+    justify-content: flex-end;
+    justify-self: baseline;
+    flex: 1;
+  }
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+
+  .title {
+    flex: 1;
+
+    .small {
+      line-height: normal;
+    }
+  }
+}

@@ -17,8 +17,8 @@ import { filter, map, takeUntil } from 'rxjs/operators';
 
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
-import { EditorComponent } from '../../../editor/components/editor';
 import { ContentLayoutComponent } from '../../components/content-layout';
+import { ContentLayoutEditorComponent } from '../content-layout-editor/content-layout-editor.component';
 
 
 @Component({
@@ -46,23 +46,13 @@ export class FsContentLayoutsComponent implements OnInit, OnDestroy {
   }
 
   public openEditor(contentLayout: any): void {
-    this._dialog.open(EditorComponent, {
+    this._dialog.open(ContentLayoutEditorComponent, {
       maxWidth: '100vw',
       width: '100%',
       height: '100%',
       data: {
-        contentPage: contentLayout,
-        title: 'Layout',
+        contentLayout,
         contentConfig: this._config,
-        save: (data) => {
-          return this._config.saveContentLayout({
-            id: contentLayout.id,
-            ...data,
-          });
-        },
-        openSettings: (data) => {
-          return this.openLayout(data);
-        },
       },
     })
       .afterClosed()

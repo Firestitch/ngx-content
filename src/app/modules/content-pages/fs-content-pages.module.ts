@@ -11,6 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
 
+import { FsCommonModule } from '@firestitch/common';
 import { FsDateModule } from '@firestitch/date';
 import { FsDialogModule } from '@firestitch/dialog';
 import { FsFormModule } from '@firestitch/form';
@@ -22,6 +23,7 @@ import { FsTextEditorModule } from '@firestitch/text-editor';
 
 import { FsContentEditorModule } from '../editor';
 
+import { ContentPageEditorComponent } from './components';
 import { ContentPageComponent } from './components/content-page';
 import { FsContentPagesComponent } from './components/content-pages';
 
@@ -41,6 +43,7 @@ import { FsContentPagesComponent } from './components/content-pages';
 
     FsListModule,
     FsDateModule,
+    FsCommonModule,
     FsFormModule,
     FsLabelModule,
     FsSkeletonModule,
@@ -56,6 +59,7 @@ import { FsContentPagesComponent } from './components/content-pages';
   declarations: [
     FsContentPagesComponent,
     ContentPageComponent,
+    ContentPageEditorComponent,
   ],
 })
 export class FsContentPagesModule {
