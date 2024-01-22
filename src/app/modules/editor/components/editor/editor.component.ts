@@ -2,25 +2,22 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
   Inject,
   OnDestroy,
   OnInit,
-  ViewChild,
 } from '@angular/core';
 
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { FsFormDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
-import { FsTextEditorComponent, FsTextEditorConfig } from '@firestitch/text-editor';
-
-import { Observable, Subject, fromEvent } from 'rxjs';
-import { finalize, take, takeUntil, tap } from 'rxjs/operators';
+import { FsTextEditorConfig } from '@firestitch/text-editor';
 
 
-import { ContentPageComponent } from '../../../content-pages/components/content-page';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil, tap } from 'rxjs/operators';
+
+import { FsContentConfig } from '../../../../interfaces';
 
 
 @Component({
@@ -30,37 +27,33 @@ import { ContentPageComponent } from '../../../content-pages/components/content-
 })
 export class EditorComponent implements OnInit, OnDestroy {
 
-  @ViewChild(FsFormDirective)
-  public form: FsFormDirective;
-
-  @ViewChild('styleEditor')
-  public styleEditor: FsTextEditorComponent;
-
-  @ViewChild('contentEditor')
-  public contentEditor: FsTextEditorComponent;
-
-  @ViewChild('separator', { static: true, read: ElementRef })
-  public separator: ElementRef;
-
-  @ViewChild('contentContainer', { static: true, read: ElementRef })
-  public contentContainer: ElementRef;
-
-  @ViewChild('styleContainer', { static: true, read: ElementRef })
-  public styleContainer: ElementRef;
-
   public contentPage: {
     id?: number;
     styles?: string;
     content?: string;
     name?: string;
+    js?: string;
+  };
+
+  public contentStyle: {
+    scss?: string;
   };
 
   public resizing = false;
   public title;
-  public editors = { content: true, styles: true };
-  public stylesConfig: FsTextEditorConfig;
-  public contentConfig: FsTextEditorConfig;
+  public editors = {
+    html: true,
+    scss: true,
+    js: false,
+    globalScss: false,
+  };
 
+  public scssConfig: FsTextEditorConfig;
+  public globalScssConfig: FsTextEditorConfig;
+  public htmlConfig: FsTextEditorConfig;
+  public jsConfig: FsTextEditorConfig;
+
+  private _config: FsContentConfig;
   private _destroy$ = new Subject<void>();
   private _save: (data) => Observable<any>;
 
@@ -69,45 +62,26 @@ export class EditorComponent implements OnInit, OnDestroy {
       contentPage: any;
       title: string;
       save: (data) => Observable<any>;
+      openSettings: (data) => Observable<any>;
+      contentConfig: FsContentConfig;
     },
     private _dialogRef: MatDialogRef<EditorComponent>,
-    private _dialog: MatDialog,
     private _message: FsMessage,
     private _cdRef: ChangeDetectorRef,
   ) {}
 
   public ngOnInit(): void {
-    this.stylesConfig = {
-      tabSize: 2,
-      language: 'scss',
-      height: '100%',
-    };
-    this.contentConfig = {
-      tabSize: 2,
-      language: 'html',
-      height: '100%',
-    };
+    this._dialogRef.addPanelClass('fs-content-editor-overlay-pane');
     this.title = this._data.title;
     this.contentPage = this._data.contentPage;
+    this._config = this._data.contentConfig;
     this._save = this._data.save;
-    this._initSeparator();
+    this.initTextEditors();
+    this.initGlobalContentStyle();
   }
 
   public editorToggleChange(event: MatButtonToggleChange): void {
     this.editors[event.value] = !this.editors[event.value];
-    this.updateEditorLayouts();
-  }
-
-  public updateEditorLayouts(): void {
-    setTimeout(() => {
-      if(this.editors.content) {
-        this.contentEditor.updateLayout();
-      }
-
-      if(this.editors.styles) {
-        this.styleEditor.updateLayout();
-      }
-    });
   }
 
   public ngOnDestroy(): void {
@@ -115,19 +89,52 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  public stylesChanged() {
-    this.form.triggerSubmit();
+  public globalScssChange() {
+    this._config.saveContentStyle(this.contentStyle)
+      .subscribe((contentStyle) => {
+        this.contentStyle = contentStyle;
+        this._message.success('Saved Changes');
+        this._cdRef.markForCheck();
+      });
   }
 
-  public contentChanged() {
-    this.form.triggerSubmit();
+  public initTextEditors() {
+    this.scssConfig = {
+      tabSize: 2,
+      language: 'scss',
+      height: '100%',
+    };
+    this.jsConfig = {
+      tabSize: 2,
+      language: 'js',
+      height: '100%',
+    };
+    this.htmlConfig = {
+      tabSize: 2,
+      language: 'html',
+      height: '100%',
+    };
+    this.globalScssConfig = {
+      tabSize: 2,
+      language: 'scss',
+      height: '100%',
+    };
   }
 
-  public save = () => {
-    return this._save({
+  public initGlobalContentStyle() {
+    this._config.loadContentStyle()
+      .subscribe((contentStyle) => {
+        this.contentStyle = contentStyle;
+        this._cdRef.markForCheck();
+      });
+  }
+
+  public saveContentPage() {
+    this._save({
       id: this.contentPage.id,
       styles: this.contentPage.styles,
       content: this.contentPage.content,
+      js: this.contentPage.js,
     })
       .pipe(
         tap((contentPage) => {
@@ -138,16 +145,12 @@ export class EditorComponent implements OnInit, OnDestroy {
           this._cdRef.markForCheck();
           this._message.success('Saved Changes');
         }),
-      );
-  };
+      )
+      .subscribe();
+  }
 
   public openSettings(): void {
-    this._dialog.open(ContentPageComponent, {
-      data: {
-        contentPage: this.contentPage,
-      },
-    })
-      .afterClosed()
+    this._data.openSettings(this.contentPage)
       .pipe(
         takeUntil(this._destroy$),
       )
@@ -160,57 +163,4 @@ export class EditorComponent implements OnInit, OnDestroy {
       });
   }
 
-
-  private _initSeparator(): void {
-    fromEvent(this.separator.nativeElement, 'mousedown')
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe((e) => {
-        this._moveSeparator(e);
-      });
-  }
-
-  private _moveSeparator(separatorEvent): void {
-    let mouseDown = {
-      clientX: separatorEvent.clientX,
-      clientY: separatorEvent.clientY,
-      offsetLeft:  Number(this.separator.nativeElement.offsetLeft),
-      offsetTop:   Number(this.separator.nativeElement.offsetTop),
-      firstWidth:  Number(this.contentContainer.nativeElement.offsetWidth),
-      secondWidth: Number(this.styleContainer.nativeElement.offsetWidth),
-    };
-
-    this.resizing = true;
-    this._cdRef.markForCheck();
-
-    fromEvent(document, 'mousemove')
-      .pipe(
-        finalize(() => {
-          mouseDown = null;
-          this.resizing = false;
-          this._cdRef.markForCheck();
-          this.updateEditorLayouts();
-        }),
-        takeUntil(
-          fromEvent(this.separator.nativeElement, 'mouseup')
-            .pipe(
-              take(1),
-              takeUntil(this._destroy$),
-            ),
-        ),
-        takeUntil(this._destroy$),
-      )
-      .subscribe((e: any) => {
-        const delta = { x: e.clientX - mouseDown.clientX,
-          y: e.clientY - mouseDown.clientY };
-
-        delta.x = Math.min(Math.max(delta.x, -mouseDown.firstWidth),
-          mouseDown.secondWidth);
-
-        this.separator.nativeElement.style.left = `${mouseDown.offsetLeft + delta.x}px`;
-        this.contentContainer.nativeElement.style.width = `${mouseDown.firstWidth + delta.x}px`;
-        this.styleContainer.nativeElement.style.width = `${mouseDown.secondWidth - delta.x}px`;
-      });
-  }
 }

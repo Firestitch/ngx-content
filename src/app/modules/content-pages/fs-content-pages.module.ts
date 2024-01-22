@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-
 import { FormsModule } from '@angular/forms';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -21,6 +21,7 @@ import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsTextEditorModule } from '@firestitch/text-editor';
 
 import { FsContentEditorModule } from '../editor';
+
 import { ContentPageComponent } from './components/content-page';
 import { FsContentPagesComponent } from './components/content-pages';
 
@@ -58,7 +59,7 @@ import { FsContentPagesComponent } from './components/content-pages';
   ],
 })
 export class FsContentPagesModule {
-  static forRoot(): ModuleWithProviders<FsContentPagesModule> {
+  public static forRoot(): ModuleWithProviders<FsContentPagesModule> {
     return {
       ngModule: FsContentPagesModule,
     };

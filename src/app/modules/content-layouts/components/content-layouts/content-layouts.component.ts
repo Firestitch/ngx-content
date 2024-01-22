@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ItemType } from '@firestitch/filter';
 import { FsListComponent, FsListConfig } from '@firestitch/list';
 
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
@@ -48,17 +48,20 @@ export class FsContentLayoutsComponent implements OnInit, OnDestroy {
   public openEditor(contentLayout: any): void {
     this._dialog.open(EditorComponent, {
       maxWidth: '100vw',
-      maxHeight:  '100vw',
       width: '100%',
       height: '100%',
       data: {
         contentPage: contentLayout,
         title: 'Layout',
+        contentConfig: this._config,
         save: (data) => {
           return this._config.saveContentLayout({
             id: contentLayout.id,
             ...data,
           });
+        },
+        openSettings: (data) => {
+          return this.openLayout(data);
         },
       },
     })
@@ -71,8 +74,8 @@ export class FsContentLayoutsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public openLayout(contentLayout: any): void {
-    this._dialog.open(ContentLayoutComponent, {
+  public openLayout(contentLayout: any): Observable<any> {
+    return this._dialog.open(ContentLayoutComponent, {
       data: {
         contentLayout,
       },
@@ -81,10 +84,7 @@ export class FsContentLayoutsComponent implements OnInit, OnDestroy {
       .pipe(
         filter((_contentLayout) => !!_contentLayout),
         takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.listComponent.reload();
-      });
+      );
   }
 
   public ngOnDestroy(): void {
@@ -106,7 +106,10 @@ export class FsContentLayoutsComponent implements OnInit, OnDestroy {
         {
           label: 'Create',
           click: () => {
-            this.openLayout({});
+            this.openLayout({})
+              .subscribe(() => {
+                this.listComponent.reload();
+              });
           },
         },
       ],

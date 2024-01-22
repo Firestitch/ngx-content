@@ -15,15 +15,16 @@ import { ItemType } from '@firestitch/filter';
 import { FsHtmlEditorConfig } from '@firestitch/html-editor';
 import { FsListComponent, FsListConfig } from '@firestitch/list';
 
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
+
 
 import { PageTypes } from '../../../../consts';
 import { PageType } from '../../../../enums';
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
 import { EditorComponent } from '../../../editor/components/editor';
-import { ContentPageComponent } from '../content-page';
+import { ContentPageComponent } from '../content-page/content-page.component';
 
 
 @Component({
@@ -59,12 +60,15 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
         contentPage,
         config: this._config,
         title: 'Page',
+        contentConfig: this._config,
         save: (data) => {
           return this._config.saveContentPage(data);
         },
+        openSettings: (data) => {
+          return this.openContentPage(data);
+        },
       },
       maxWidth: '100vw',
-      maxHeight:  '100vw',
       width: '100%',
       height: '100%',
       autoFocus: false,
@@ -84,6 +88,16 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
+  public openContentPage(contentPage): Observable<any> {
+    return this._dialog.open(ContentPageComponent, {
+      data: { contentPage },
+    })
+      .afterClosed()
+      .pipe(
+        takeUntil(this._destroy$),
+      );
+  }
+
   private _initListConfig(): void {
     this.listConfig = {
       filters: [
@@ -97,17 +111,11 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
         {
           label: 'Create',
           click: () => {
-            this._dialog.open(ContentPageComponent, {
-              data: {
-                contentPage: {
-                  type: PageType.StandardPage,
-                },
-              },
+            this.openContentPage({
+              type: PageType.StandardPage,
             })
-              .afterClosed()
               .pipe(
                 filter((contentPage) => !!contentPage),
-                takeUntil(this._destroy$),
               )
               .subscribe((contentPage) => {
                 this.openEditor(contentPage);
@@ -148,7 +156,6 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
       },
     };
   }
-
 }
 
 

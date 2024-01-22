@@ -4,6 +4,7 @@ export interface FsContentPage {
   state?: string;
   type?: string;
   path?: string;
+  js?: string;
   title?: string;
   content?: string;
   styles?: string;

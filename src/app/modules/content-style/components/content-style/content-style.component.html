@@ -1,0 +1,9 @@
+<ng-container *fsSkeletonForm="contentStyle">
+  <fs-text-editor 
+    [(ngModel)]="contentStyle.scss" 
+    name="contentStyle"
+    [fsModelChangeOptions]="{ debounce: 300 }"
+    (fsModelChange)="save()"
+    [config]="styleConfig">
+  </fs-text-editor>              
+</ng-container>

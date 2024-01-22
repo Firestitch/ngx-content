@@ -1,13 +1,22 @@
-form {
-  display: block;
-  height: 100%;  
+::ng-deep {
+  .fs-content-editor-overlay-pane {
+    .mat-dialog-container {
+      border-radius: 0;
+    }   
+  }   
+}
 
-  fs-dialog {
-    display: flex;
-    flex-direction: column;
-    height: 100%;    
+:host ::ng-deep {
+  .as-split-gutter {
+    background-color: unset !important;
   }
-  
+}
+
+fs-dialog {
+  display: flex;
+  height: 100%;
+  flex-direction: column;  
+
   ::ng-deep {
     .mat-dialog-content {
       max-height: none;
@@ -36,63 +45,15 @@ form {
   flex-direction: column;
 }
 
-.editors {
-  width: 5000px;
-  max-width: 100%;
+
+.editor-container {
   height: 100%;
+  border-radius: 5px;
   display: flex;
-  min-height: 0;
+  flex-direction: column;
 
-  &:not(.separator-enabled) {
-    .separator {
-      display: none;
-    }
-
-    .editor {
-      width: 100% !important;
-    }
-  }
-
-  .separator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: col-resize;
-    background-color: #fff;
-    width: 40px;
-    height: 100%;
-    user-select: none;
-    flex-shrink: 0;
-  }
-
-  .editor {
-    height: 100%;
-    display: flex;
-    min-width: 0;
-    width: 100%;
-    flex-direction: column;
-    flex-grow: 1;
-    
-    &.editor-styles:not(.styles-enabled),
-    &.editor-content:not(.content-enabled) {
-      display: none;
-    }
-
-    .editor-container {
-      height: 100%;
-      background: #1E1E1E;
-      border-radius: 5px;
-    }
-
-    + .editor {
-      margin-left: 20px;
-    }
-
-    fs-label {
-      background-color: #fff;
-      padding-bottom: 5px;
-    }
+  fs-text-editor {
+    flex: 1;
   }
 }
 

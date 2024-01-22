@@ -1,13 +1,18 @@
 import {
-  Component,
+  AfterViewChecked,
   ChangeDetectionStrategy,
-  OnDestroy,
+  Component,
   ElementRef,
   Input,
-  AfterViewChecked,
+  OnDestroy,
+  OnInit,
+  ViewChild,
 } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+
+import { HtmlRenderer } from '@firestitch/body';
+
 
 import { Subject } from 'rxjs';
 
@@ -18,36 +23,37 @@ import { Subject } from 'rxjs';
   styleUrls: ['./content-renderer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContentRendererComponent implements OnDestroy, AfterViewChecked {
+export class ContentRendererComponent implements OnDestroy, AfterViewChecked, OnInit {
 
-  @Input() public set contentPage(contentPage) {
-    if(contentPage) {
-      this.content = this._sanitizer.bypassSecurityTrustHtml(contentPage.content);
-      this.styles = contentPage.styles;
-    }
-  }
+  @ViewChild('script', { read: ElementRef })
+  public script: ElementRef;
 
-  public content;
-  public styles;
-  public _destroy$ = new Subject();
+  @Input() public contentPage;
+
+  public content: SafeHtml;
+
+  private _destroy$ = new Subject();
 
   constructor(
     private _sanitizer: DomSanitizer,
     private _router: Router,
     private _el: ElementRef,
+    private _htmlRenderer: HtmlRenderer,
   ) {}
 
+  public ngOnInit(): void {
+    this._htmlRenderer.addStyle(this.contentPage.styles, { id: 'contentPageStyles' });
+    this.content = this._sanitizer.bypassSecurityTrustHtml(this.contentPage.content);
+  }
+
   public ngAfterViewChecked(): void {
-    let el = document.querySelector('#contentPageStyles');
-    if(!el) {
-      el = document.createElement('style');
-      el.setAttribute('id','contentPageStyles');
-      document.getElementsByTagName('head')[0].appendChild(el);
-    }
-
-    el.innerHTML = this.styles;
-
     this.registerHrefs();
+
+    if(this.contentPage.js) {
+      const script = document.createElement('script');
+      script.text = this.contentPage.js;
+      this.script.nativeElement.after(script);
+    }
   }
 
   public registerHrefs(): void {

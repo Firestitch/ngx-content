@@ -2,7 +2,7 @@
   "name": "@firestitch/content",
   "title": "Content",
   "description": "@firestitch/content",
-  "version": "12.2.2",
+  "version": "12.2.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-content"
@@ -42,9 +42,10 @@
     "@firestitch/autocomplete": "^12.1.4",
     "@firestitch/autocomplete-chips": "^12.4.16",
     "@firestitch/badge": "^12.0.1",
+    "@firestitch/body": "^12.0.4",
     "@firestitch/chip": "^12.0.0",
     "@firestitch/clear": "^12.3.4",
-    "@firestitch/common": "^12.6.5",
+    "@firestitch/common": "^12.7.0",
     "@firestitch/component-tools": "^12.0.17",
     "@firestitch/core": "^12.1.0",
     "@firestitch/date": "^12.4.4",
@@ -54,13 +55,13 @@
     "@firestitch/example": "^12.1.1",
     "@firestitch/exif-js": "^2.3.0",
     "@firestitch/file": "^12.15.0",
-    "@firestitch/filter": "^12.11.7",
+    "@firestitch/filter": "^13.0.3",
     "@firestitch/form": "^12.5.0",
     "@firestitch/html-editor": "^12.7.3",
     "@firestitch/iframe": "^12.0.7",
     "@firestitch/label": "^12.0.2",
     "@firestitch/lint": "^12.0.18",
-    "@firestitch/list": "^12.14.3",
+    "@firestitch/list": "^12.19.1",
     "@firestitch/mask": "^12.3.5",
     "@firestitch/menu": "^12.2.2",
     "@firestitch/message": "^12.3.1",
@@ -74,7 +75,7 @@
     "@firestitch/skeleton": "^12.0.0",
     "@firestitch/store": "^12.1.1",
     "@firestitch/style": "^12.3.3",
-    "@firestitch/text-editor": "^12.4.3",
+    "@firestitch/text-editor": "^12.4.5",
     "date-fns": "^2.8.1",
     "date-fns-tz": "^1.2.2",
     "hammerjs": "^2.0.8",
@@ -82,6 +83,9 @@
     "rxjs": "^6.5.3",
     "typescript": "4.3.5",
     "zone.js": "~0.11.4"
+  },
+  "dependencies": {
+    "angular-split": "^13.2.0"
   },
   "engines": {
     "node": ">=6.0.0"

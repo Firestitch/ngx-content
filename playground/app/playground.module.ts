@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes } from '@angular/router';
 
 import {
@@ -9,16 +8,19 @@ import {
   FsContentLayoutsModule,
   FsContentModule,
   FsContentPagesModule,
+  FsContentStyleModule,
 } from '@firestitch/content';
 import { FsExampleModule } from '@firestitch/example';
 import { FsHtmlEditorModule } from '@firestitch/html-editor';
 import { FsLabelModule } from '@firestitch/label';
 import { FsMessageModule } from '@firestitch/message';
 import { FsStoreModule } from '@firestitch/store';
-
 import { FsTextEditorModule } from '@firestitch/text-editor';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { AppComponent } from './app.component';
-import { ExamplesComponent } from './components';
+import { ContentStyleComponent, ExamplesComponent } from './components';
 import { ContentComponent } from './components/content';
 import { ContentLayoutsComponent } from './components/content-layouts';
 import { ContentPagesComponent } from './components/content-pages';
@@ -31,11 +33,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  bootstrap: [ AppComponent ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     FsContentPagesModule,
     FsContentLayoutsModule,
+    FsContentStyleModule,
     BrowserAnimationsModule,
     FsContentModule,
     AppMaterialModule,
@@ -49,9 +52,9 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
   ],
   providers: [
-    { provide: FS_CONTENT_CONFIG, 
-      useFactory: contentConfigFactory, 
-      deps: [ ] 
+    { provide: FS_CONTENT_CONFIG,
+      useFactory: contentConfigFactory,
+      deps: [],
     },
   ],
   declarations: [
@@ -60,6 +63,7 @@ const routes: Routes = [
     ContentPagesComponent,
     ContentComponent,
     ContentLayoutsComponent,
+    ContentStyleComponent,
   ],
 })
 export class PlaygroundModule {

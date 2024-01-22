@@ -1,1 +1,3 @@
-<fs-content-renderer *ngIf="contentPage" [contentPage]="contentPage"></fs-content-renderer>
+<ng-container *ngIf="contentPage">
+  <fs-content-renderer [contentPage]="contentPage"></fs-content-renderer>
+</ng-container>
