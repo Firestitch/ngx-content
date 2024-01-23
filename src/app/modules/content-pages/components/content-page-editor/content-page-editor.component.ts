@@ -14,7 +14,7 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { FsMessage } from '@firestitch/message';
 import { FsPrompt } from '@firestitch/prompt';
 
-import { Subject, of, throwError } from 'rxjs';
+import { Subject, fromEvent, of, throwError } from 'rxjs';
 import { filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { EditorType } from '../../../../enums';
@@ -70,6 +70,7 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
     this._dialogRef.disableClose = true;
     this.config = this._data.contentConfig;
     this._initContentPage(this._data.contentPage);
+    this._initEscape();
   }
 
   public editorToggleChange(event: MatButtonToggleChange): void {
@@ -139,7 +140,7 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
       );
   }
 
-  public cancel(): void {
+  public close(): void {
     if(!this.editor.hasChanges) {
       return this._dialogRef.close();
     }
@@ -187,6 +188,19 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
           ...contentPage,
         };
         this._cdRef.markForCheck();
+      });
+  }
+
+  private _initEscape(): void {
+    fromEvent(document, 'keydown')
+      .pipe(
+        filter((event: KeyboardEvent) => event.code === 'Escape'),
+        takeUntil(this._destroy$),
+      ).subscribe(() => {
+        const dialogRef = this._dialog.openDialogs.reverse()[0];
+        if(dialogRef?.componentInstance === this) {
+          this.close();
+        }
       });
   }
 
