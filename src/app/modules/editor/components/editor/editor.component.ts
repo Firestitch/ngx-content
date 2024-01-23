@@ -13,9 +13,10 @@ import {
 import { FsMessage } from '@firestitch/message';
 import { FsTextEditorConfig } from '@firestitch/text-editor';
 
-
 import { Subject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
+import { EditorType } from '../../../../enums';
 import { FsContentConfig } from '../../../../interfaces';
 
 
@@ -38,6 +39,11 @@ export class EditorComponent implements OnInit, OnDestroy {
   @Input() public contentConfig: FsContentConfig;
 
   @Output() public changed = new EventEmitter<{ type: string; value: string }>();
+  @Output() public focused = new EventEmitter<string>();
+  @Output() public blured = new EventEmitter<string>();
+
+  public changes: any = {};
+  public EditorType = EditorType;
 
   public contentStyle: {
     scss?: string;
@@ -54,8 +60,8 @@ export class EditorComponent implements OnInit, OnDestroy {
   private _destroy$ = new Subject<void>();
 
   constructor(
-    private _message: FsMessage,
     private _cdRef: ChangeDetectorRef,
+    private _message: FsMessage,
   ) {}
 
   public ngOnInit(): void {
@@ -68,13 +74,20 @@ export class EditorComponent implements OnInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  public globalScssChange() {
-    this.contentConfig.saveContentStyle(this.contentStyle)
-      .subscribe((contentStyle) => {
-        this.contentStyle = contentStyle;
-        this._message.success('Saved Changes');
-        this._cdRef.markForCheck();
-      });
+  public change(type, value) {
+    this.changed.emit({ type, value });
+    this.changes[type] = value;
+  }
+
+  public get hasChanges() {
+    return Object.keys(this.changes)
+      .filter((name) => !!this.changes[name])
+      .length !== 0;
+  }
+
+  public clearChange(type) {
+    this.changes[type] = null;
+    this._cdRef.markForCheck();
   }
 
   public initTextEditors() {
@@ -82,21 +95,45 @@ export class EditorComponent implements OnInit, OnDestroy {
       tabSize: 2,
       language: 'scss',
       height: '100%',
+      focus: () => {
+        this.focused.emit(EditorType.Scss);
+      },
+      blur: () => {
+        this.blured.emit(EditorType.Scss);
+      },
     };
     this.jsConfig = {
       tabSize: 2,
       language: 'js',
       height: '100%',
+      focus: () => {
+        this.focused.emit(EditorType.Js);
+      },
+      blur: () => {
+        this.blured.emit(EditorType.Js);
+      },
     };
     this.htmlConfig = {
       tabSize: 2,
       language: 'html',
       height: '100%',
+      focus: () => {
+        this.focused.emit(EditorType.Html);
+      },
+      blur: () => {
+        this.blured.emit(EditorType.Html);
+      },
     };
     this.globalScssConfig = {
       tabSize: 2,
       language: 'scss',
       height: '100%',
+      focus: () => {
+        this.focused.emit(EditorType.GlobalScss);
+      },
+      blur: () => {
+        this.blured.emit(EditorType.GlobalScss);
+      },
     };
   }
 
@@ -106,6 +143,15 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.contentStyle = contentStyle || {};
         this._cdRef.markForCheck();
       });
+  }
+
+  public saveGlobalScss() {
+    return this.contentConfig.saveContentStyle(this.contentStyle)
+      .pipe(
+        tap(() => {
+          this._message.success('Saved Changes');
+        }),
+      );
   }
 
 }

@@ -5,18 +5,21 @@ import {
   Inject,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 
 import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
+import { FsPrompt } from '@firestitch/prompt';
 
+import { Subject, of, throwError } from 'rxjs';
+import { filter, switchMap, takeUntil, tap } from 'rxjs/operators';
 
-import { Subject } from 'rxjs';
-import { takeUntil, tap } from 'rxjs/operators';
-
-import { FsContentConfig, FsContentPage } from '../../../../interfaces';
+import { EditorType } from '../../../../enums';
+import { FsContentConfig } from '../../../../interfaces';
+import { EditorComponent } from '../../../editor/components/editor';
 import { ContentPageComponent } from '../content-page/content-page.component';
 
 
@@ -27,6 +30,9 @@ import { ContentPageComponent } from '../content-page/content-page.component';
 })
 export class ContentPageEditorComponent implements OnInit, OnDestroy {
 
+  @ViewChild(EditorComponent)
+  public editor: EditorComponent;
+
   public contentPage: {
     id?: number;
     styles?: string;
@@ -34,15 +40,15 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
     name?: string;
     js?: string;
   };
-
+  public focused = null;
   public config: FsContentConfig;
   public resizing = false;
   public title;
   public editors = {
-    html: true,
-    scss: true,
-    js: false,
-    globalScss: false,
+    [EditorType.Html]: true,
+    [EditorType.Scss]: true,
+    [EditorType.Js]: false,
+    [EditorType.GlobalScss]: false,
   };
 
   private _destroy$ = new Subject<void>();
@@ -56,10 +62,12 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
     private _message: FsMessage,
     private _dialog: MatDialog,
     private _cdRef: ChangeDetectorRef,
+    private _prompt: FsPrompt,
   ) {}
 
   public ngOnInit(): void {
     this._dialogRef.addPanelClass('fs-content-editor-overlay-pane');
+    this._dialogRef.disableClose = true;
     this.config = this._data.contentConfig;
     this._initContentPage(this._data.contentPage);
   }
@@ -81,40 +89,86 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
       });
   }
 
-  public editorChanged(event) {
-    const data: FsContentPage = {};
-
-    if(event.type === 'js') {
-      data.js = event.value;
-    }
-
-    if(event.type === 'html') {
-      data.content = event.value;
-    }
-
-    if(event.type === 'scss') {
-      data.styles = event.value;
-    }
-
-    this.saveContentPage(data);
+  public editorFocused(type) {
+    this.focused = type;
   }
 
-  public saveContentPage(data) {
-    this.config.saveContentPage({
+  public save = () => {
+    return of(null)
+      .pipe(
+        filter(() => this.focused),
+        switchMap(() => {
+          switch (this.focused) {
+            case EditorType.Js:
+            case EditorType.Html:
+            case EditorType.Scss:
+              return this.saveContentPage();
+            case EditorType.GlobalScss:
+              return this.editor.saveGlobalScss();
+          }
+
+          return throwError('Invalid focus');
+        }),
+        tap(() => {
+          this.editor.clearChange(this.focused);
+          this._cdRef.markForCheck();
+        }),
+      );
+  };
+
+  public saveContentPage() {
+    const names = {
+      [EditorType.Js]: 'js',
+      [EditorType.Scss]: 'styles',
+      [EditorType.Html]: 'content',
+    };
+
+    const data = {
+      id: this.contentPage.id,
+      [names[this.focused]]: this.editor.changes[this.focused],
+    };
+
+    return this.config.saveContentPage({
       id: this.contentPage.id,
       ...data,
     })
       .pipe(
-        tap((contentPage) => {
-          this.contentPage = {
-            ...this.contentPage,
-            ...contentPage,
-          };
-          this._cdRef.markForCheck();
+        tap(() => {
           this._message.success('Saved Changes');
         }),
+      );
+  }
+
+  public cancel(): void {
+    if(!this.editor.hasChanges) {
+      return this._dialogRef.close();
+    }
+
+    this._prompt.confirm({
+      dialogConfig: {
+        width: null,
+      },
+      title: 'You have unsaved changes',
+      template: 'What would you like to do with your changes?',
+      buttons: [
+        {
+          label: 'Review Changes',
+          value: 'review',
+        },
+        {
+          label: 'Discard Changes',
+          value: 'discard',
+        },
+      ],
+    })
+      .pipe(
+        takeUntil(this._destroy$),
       )
-      .subscribe();
+      .subscribe((value) =>{
+        if(value === 'discard') {
+          this._dialogRef.close();
+        }
+      });
   }
 
   public openSettings(): void {

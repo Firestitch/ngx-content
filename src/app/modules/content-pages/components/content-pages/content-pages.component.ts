@@ -68,7 +68,6 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
     })
       .afterClosed()
       .pipe(
-        filter((_contentPage) => !!_contentPage),
         takeUntil(this._destroy$),
       )
       .subscribe(() => {

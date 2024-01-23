@@ -1,49 +1,49 @@
 <as-split [unit]="'percent'" [gutterSize]="25"> 
   <as-split-area [size]="70" [visible]="showHtml" [order]="1">
     <div class="editor-container">
-      <fs-label>HTML</fs-label>
+      <fs-label>HTML {{changes.html ? '*' : ''}}</fs-label>
       <fs-text-editor 
         [(ngModel)]="html" 
         name="html"
-        [fsModelChangeOptions]="{ debounce: 300 }"
-        (fsModelChange)="changed.emit({ type: 'html', value: $event })"
+        [fsModelChangeOptions]="{ debounce: 0 }"
+        (fsModelChange)="change(EditorType.Html, $event)"
         [config]="htmlConfig">
       </fs-text-editor>              
     </div>
   </as-split-area>
   <as-split-area [size]="30" [visible]="showScss" [order]="2">
     <div class="editor-container">
-      <fs-label>SCSS</fs-label>
+      <fs-label>SCSS {{changes.scss ? '*' : ''}}</fs-label>
       <fs-text-editor 
         [(ngModel)]="scss" 
         name="scss"
-        [fsModelChangeOptions]="{ debounce: 300 }"
-        (fsModelChange)="changed.emit({ type: 'scss', value: $event })"
+        [fsModelChangeOptions]="{ debounce: 0 }"
+        (fsModelChange)="change(EditorType.Scss, $event)"
         [config]="scssConfig">
       </fs-text-editor>    
     </div>
   </as-split-area>
   <as-split-area [size]="30"  [visible]="showJs" [order]="3">
     <div class="editor-container">
-      <fs-label>JS</fs-label>
+      <fs-label>JS {{changes.js ? '*' : ''}}</fs-label>
       <fs-text-editor 
         [(ngModel)]="js" 
         name="js"
-        [fsModelChangeOptions]="{ debounce: 300 }"
-        (fsModelChange)="changed.emit({ type: 'js', value: $event })"
+        [fsModelChangeOptions]="{ debounce: 0 }"
+        (fsModelChange)="change(EditorType.Js, $event)"
         [config]="jsConfig">
       </fs-text-editor>    
     </div>
   </as-split-area>
   <as-split-area [size]="30" [visible]="showGlobalScss" [order]="4">
     <div class="editor-container">
-      <fs-label>Global SCSS</fs-label>
+      <fs-label>Global SCSS {{changes.globalScss ? '*' : ''}}</fs-label>
       <ng-container *fsSkeleton="contentStyle">
         <fs-text-editor 
           [(ngModel)]="contentStyle.scss" 
           name="globalScss"
           [fsModelChangeOptions]="{ debounce: 300 }"
-          (fsModelChange)="globalScssChange()"
+          (fsModelChange)="change(EditorType.GlobalScss, $event)"
           [config]="globalScssConfig">
         </fs-text-editor> 
       </ng-container>   

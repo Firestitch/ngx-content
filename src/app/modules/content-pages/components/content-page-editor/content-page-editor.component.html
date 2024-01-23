@@ -1,44 +1,49 @@
-<fs-dialog *fsSkeletonForm="contentPage">
-  <h1 mat-dialog-title>
-    <div class="title-container">
-      <div class="title">
-        Page Editor
-        <div class="small">{{contentPage.name}}</div>   
+<form fsForm [submit]="save" [dirtySubmitButton]="false" [confirm]="false">
+  <fs-dialog *fsSkeletonForm="contentPage">
+    <h1 mat-dialog-title>
+      <div class="title-container">
+        <div class="title">
+          Page Editor
+          <div class="small">{{contentPage.name}}</div>   
+        </div>
+        <a
+            (click)="openSettings()"
+            mat-icon-button>
+          <mat-icon>settings</mat-icon>
+        </a>   
       </div>
-      <a
-          (click)="openSettings()"
-          mat-icon-button>
-        <mat-icon>settings</mat-icon>
-      </a>   
+    </h1>
+    <div mat-dialog-content>
+      <app-editor
+        [contentConfig]="config"
+        [showHtml]="editors.html"
+        [showJs]="editors.js"
+        [showScss]="editors.scss"
+        [showGlobalScss]="editors.globalScss"
+        [html]="contentPage.content"
+        [scss]="contentPage.styles"
+        [js]="contentPage.js"
+        (focused)="editorFocused($event)">
+      </app-editor>
     </div>
-  </h1>
-  <div mat-dialog-content>
-    <app-editor
-      [contentConfig]="config"
-      [showHtml]="editors.html"
-      [showJs]="editors.js"
-      [showScss]="editors.scss"
-      [showGlobalScss]="editors.globalScss"
-      [html]="contentPage.content"
-      [scss]="contentPage.styles"
-      [js]="contentPage.js"
-      (changed)="editorChanged($event)">
-    </app-editor>
-  </div>
 
-  <div mat-dialog-actions>
-    <fs-form-dialog-actions
-      [save]="false"
-      [done]="true">
-    </fs-form-dialog-actions>
-    <div class="toggles">
-      <mat-button-toggle-group multiple>
-        <mat-button-toggle value="html" [checked]="editors.html" (change)="editorToggleChange($event)">HTML</mat-button-toggle>
-        <mat-button-toggle value="scss" [checked]="editors.scss" (change)="editorToggleChange($event)">SCSS</mat-button-toggle>
-        <mat-button-toggle value="js" [checked]="editors.js" (change)="editorToggleChange($event)">JS</mat-button-toggle>
-        <mat-button-toggle value="globalScss" [checked]="editors.globalScss" (change)="editorToggleChange($event)">Global SCSS</mat-button-toggle>
-      </mat-button-toggle-group>      
+    <div mat-dialog-actions>
+      <button 
+          mat-button
+          color="primary"
+          (click)="cancel()"
+          type="button">  
+        Done      
+      </button>
+      
+      <div class="toggles">
+        <mat-button-toggle-group multiple>
+          <mat-button-toggle value="html" [checked]="editors.html" (change)="editorToggleChange($event)">HTML</mat-button-toggle>
+          <mat-button-toggle value="scss" [checked]="editors.scss" (change)="editorToggleChange($event)">SCSS</mat-button-toggle>
+          <mat-button-toggle value="js" [checked]="editors.js" (change)="editorToggleChange($event)">JS</mat-button-toggle>
+          <mat-button-toggle value="globalScss" [checked]="editors.globalScss" (change)="editorToggleChange($event)">Global SCSS</mat-button-toggle>
+        </mat-button-toggle-group>      
+      </div>
     </div>
-  </div>
 </fs-dialog>
-
+</form>

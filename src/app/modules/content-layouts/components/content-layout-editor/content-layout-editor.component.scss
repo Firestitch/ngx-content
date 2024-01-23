@@ -6,6 +6,10 @@
   }   
 }
 
+form {
+  height: 100%;
+}
+
 fs-dialog {
   display: flex;
   height: 100%;
@@ -21,10 +25,6 @@ fs-dialog {
 }
 
 .mat-dialog-actions {
-  fs-form-dialog-actions {
-    width: auto;
-  }
-
   .toggles {
     display: flex;
     justify-content: flex-end;
