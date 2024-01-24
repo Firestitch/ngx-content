@@ -4,11 +4,11 @@
     <div mat-dialog-content>
       <div class="fs-column">
         <mat-form-field>
+          <mat-label>Type</mat-label>
           <mat-select
               [(ngModel)]="contentPage.type"
               name="type"
-              required
-              placeholder="Type">
+              required>
             <mat-option
                 *ngFor="let item of PageTypes"
                 [value]="item.value">
@@ -17,11 +17,11 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field *ngIf="contentLayouts">
+          <mat-label>Layout</mat-label>
           <mat-select
             [(ngModel)]="contentPage.contentLayoutId"
             required
-            name="contentLayoutId"
-            placeholder="Layout">
+            name="contentLayoutId">
               <mat-option
                 *ngFor="let item of contentLayouts"
                 [value]="item.id">
@@ -30,27 +30,27 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field>
+          <mat-label>Name</mat-label>
           <input
             matInput
             [(ngModel)]="contentPage.name"
             name="name"
-            required
-            placeholder="Name">
+            required>
         </mat-form-field>
         <mat-form-field>
+          <mat-label>Path</mat-label>
           <input
             matInput
             [(ngModel)]="contentPage.path"
             name="path"
-            required
-            placeholder="Path">
+            required>
         </mat-form-field>
         <mat-form-field>
+          <mat-label>Title</mat-label>
           <input
             matInput
             [(ngModel)]="contentPage.title"
-            name="title"
-            placeholder="Title">
+            name="title">
         </mat-form-field>
       </div>
     </div>
