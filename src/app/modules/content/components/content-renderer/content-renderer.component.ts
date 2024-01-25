@@ -11,8 +11,7 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
-import { HtmlRenderer } from '@firestitch/body';
-
+import { HtmlRenderer } from '@firestitch/html';
 
 import { Subject } from 'rxjs';
 

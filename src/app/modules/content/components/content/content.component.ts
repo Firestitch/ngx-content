@@ -10,7 +10,7 @@ import {
 import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 
-import { HtmlRenderer } from '@firestitch/body';
+import { HtmlRenderer } from '@firestitch/html';
 
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
