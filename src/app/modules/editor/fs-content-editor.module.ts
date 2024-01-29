@@ -20,6 +20,7 @@ import { FsTextEditorModule } from '@firestitch/text-editor';
 import { AngularSplitModule } from 'angular-split';
 
 import { EditorComponent } from './components/editor';
+import { EditorLabelComponent } from './components/editor-label';
 
 
 @NgModule({
@@ -49,6 +50,7 @@ import { EditorComponent } from './components/editor';
   ],
   declarations: [
     EditorComponent,
+    EditorLabelComponent,
   ],
 })
 export class FsContentEditorModule {

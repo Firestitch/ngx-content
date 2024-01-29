@@ -1,0 +1,4 @@
+<div class="label" [ngClass]="{ focused: focused }">
+  <ng-content></ng-content>
+  <span *ngIf="changed" class="changed">&nbsp;&#9679;</span>
+</div>

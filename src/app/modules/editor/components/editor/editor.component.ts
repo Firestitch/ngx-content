@@ -35,7 +35,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   @Input() public html;
   @Input() public scss;
-  @Input() public js ;
+  @Input() public js;
   @Input() public contentConfig: FsContentConfig;
 
   @Output() public changed = new EventEmitter<{ type: string; value: string }>();
@@ -44,6 +44,7 @@ export class EditorComponent implements OnInit, OnDestroy {
 
   public changes: any = {};
   public EditorType = EditorType;
+  public focusedArea: string;
 
   public contentStyle: {
     scss?: string;
@@ -62,7 +63,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   constructor(
     private _cdRef: ChangeDetectorRef,
     private _message: FsMessage,
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this.initTextEditors();
@@ -86,7 +87,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   }
 
   public clearChange(type) {
-    this.changes[type] = null;
+    this.changes[type] = undefined;
     this._cdRef.markForCheck();
   }
 
@@ -96,7 +97,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       language: 'scss',
       height: '100%',
       focus: () => {
-        this.focused.emit(EditorType.Scss);
+        this._onFocus(EditorType.Scss);
       },
       blur: () => {
         this.blured.emit(EditorType.Scss);
@@ -107,7 +108,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       language: 'js',
       height: '100%',
       focus: () => {
-        this.focused.emit(EditorType.Js);
+        this._onFocus(EditorType.Js);
       },
       blur: () => {
         this.blured.emit(EditorType.Js);
@@ -118,7 +119,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       language: 'html',
       height: '100%',
       focus: () => {
-        this.focused.emit(EditorType.Html);
+        this._onFocus(EditorType.Html);
       },
       blur: () => {
         this.blured.emit(EditorType.Html);
@@ -129,7 +130,7 @@ export class EditorComponent implements OnInit, OnDestroy {
       language: 'scss',
       height: '100%',
       focus: () => {
-        this.focused.emit(EditorType.GlobalScss);
+        this._onFocus(EditorType.GlobalScss);
       },
       blur: () => {
         this.blured.emit(EditorType.GlobalScss);
@@ -152,6 +153,11 @@ export class EditorComponent implements OnInit, OnDestroy {
           this._message.success('Saved Changes');
         }),
       );
+  }
+
+  private _onFocus(type): void {
+    this.focusedArea = type;
+    this.focused.emit(type);
   }
 
 }

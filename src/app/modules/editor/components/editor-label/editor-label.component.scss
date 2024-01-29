@@ -1,0 +1,17 @@
+.label {
+  display: inline-block;
+  min-width: 40px;
+  text-align: center;
+  background-color: #1e1e1e;
+  color: #C8C8C8;
+  padding: 6px 10px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  &.focused {
+    color: #fff;
+  }
+  .changed {
+    font-size: 16px;
+    line-height: 16px;
+  }
+}

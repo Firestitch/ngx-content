@@ -1,7 +1,11 @@
 <as-split [unit]="'percent'" [gutterSize]="25"> 
   <as-split-area [size]="70" [visible]="showHtml" [order]="1">
     <div class="editor-container">
-      <fs-label>HTML {{changes.html ? '*' : ''}}</fs-label>
+      <app-editor-label
+          [changed]="changes.html !== undefined"
+          [focused]="focusedArea === 'html'">
+        HTML
+      </app-editor-label>
       <fs-text-editor 
         [(ngModel)]="html" 
         name="html"
@@ -13,7 +17,11 @@
   </as-split-area>
   <as-split-area [size]="30" [visible]="showScss" [order]="2">
     <div class="editor-container">
-      <fs-label>SCSS {{changes.scss ? '*' : ''}}</fs-label>
+      <app-editor-label
+          [changed]="changes.scss !== undefined"
+          [focused]="focusedArea === 'scss'">
+        SCSS
+      </app-editor-label>
       <fs-text-editor 
         [(ngModel)]="scss" 
         name="scss"
@@ -25,7 +33,11 @@
   </as-split-area>
   <as-split-area [size]="30"  [visible]="showJs" [order]="3">
     <div class="editor-container">
-      <fs-label>JS {{changes.js ? '*' : ''}}</fs-label>
+      <app-editor-label
+          [changed]="changes.js !== undefined"
+          [focused]="focusedArea === 'js'">
+        JS
+      </app-editor-label>
       <fs-text-editor 
         [(ngModel)]="js" 
         name="js"
@@ -37,7 +49,11 @@
   </as-split-area>
   <as-split-area [size]="30" [visible]="showGlobalScss" [order]="4">
     <div class="editor-container">
-      <fs-label>Global SCSS {{changes.globalScss ? '*' : ''}}</fs-label>
+      <app-editor-label
+          [changed]="changes.globalScss !== undefined"
+          [focused]="focusedArea === 'globalScss'">
+        Global SCSS
+      </app-editor-label>
       <ng-container *fsSkeleton="contentStyle">
         <fs-text-editor 
           [(ngModel)]="contentStyle.scss" 
