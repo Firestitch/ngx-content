@@ -51,6 +51,10 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
     [EditorType.GlobalScss]: false,
   };
 
+  public get isMac(): boolean {
+    return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+  }
+
   private _destroy$ = new Subject<void>();
 
   constructor(
@@ -63,7 +67,7 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
     private _dialog: MatDialog,
     private _cdRef: ChangeDetectorRef,
     private _prompt: FsPrompt,
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this._dialogRef.addPanelClass('fs-content-editor-overlay-pane');
@@ -140,8 +144,9 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
       );
   }
 
+
   public close(): void {
-    if(!this.editor.hasChanges) {
+    if (!this.editor.hasChanges) {
       return this._dialogRef.close();
     }
 
@@ -165,8 +170,8 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this._destroy$),
       )
-      .subscribe((value) =>{
-        if(value === 'discard') {
+      .subscribe((value) => {
+        if (value === 'discard') {
           this._dialogRef.close();
         }
       });
@@ -198,7 +203,7 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
         takeUntil(this._destroy$),
       ).subscribe(() => {
         const dialogRef = this._dialog.openDialogs.reverse()[0];
-        if(dialogRef?.componentInstance === this) {
+        if (dialogRef?.componentInstance === this) {
           this.close();
         }
       });
