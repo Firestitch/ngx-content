@@ -42,6 +42,11 @@ h1 {
       &:last-child {
         margin-right: 0;
       }
+      ::ng-deep {
+        .svg-icon-process {
+          display: none;
+        }
+      }
     }
   }
 }
