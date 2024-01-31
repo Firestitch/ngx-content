@@ -14,8 +14,8 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { FsMessage } from '@firestitch/message';
 import { FsPrompt } from '@firestitch/prompt';
 
-import { Subject, fromEvent, of, throwError } from 'rxjs';
-import { delay, filter, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { Observable, Subject, fromEvent, of, throwError } from 'rxjs';
+import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { EditorType } from '../../../../enums';
 import { FsContentConfig } from '../../../../interfaces';
@@ -100,13 +100,17 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
     this.focused = type;
   }
 
-  public save = () => {
+  public save(): void {
+    this.submit()
+      .subscribe();
+  }
+
+  public submit = (): Observable<any> => {
     this.submitting = true;
 
     return of(null)
       .pipe(
         filter(() => this.focused),
-        delay(3000),
         switchMap(() => {
           switch (this.focused) {
             case EditorType.Js:
@@ -119,20 +123,17 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
 
           return throwError('Invalid focus');
         }),
+        tap(() => {
+          this.editor.clearChange(this.focused);
+          this._cdRef.markForCheck();
+        }),
+        finalize(() => {
+          this.submitting = false;
+          this._cdRef.markForCheck();
+        }),
       )
       .pipe(
         takeUntil(this._destroy$),
-      )
-      .subscribe(
-        () => {
-          this.editor.clearChange(this.focused);
-          this._cdRef.markForCheck();
-        },
-        () => { },
-        () => {
-          this.submitting = false;
-          this._cdRef.markForCheck();
-        },
       );
   };
 
