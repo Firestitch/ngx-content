@@ -24,7 +24,8 @@
         <div class="actions">
           <button
               #submit
-              mat-button
+              mat-stroked-button
+              color="primary"
               [disabled]="!editor?.hasChanges || submitting"
               [matTooltip]="isMac ? 'cmd+s' : 'ctrl+s'"
               type="button"
@@ -33,7 +34,7 @@
           </button>
 
           <button 
-              mat-button
+              mat-stroked-button
               (click)="close()"
               type="button">  
             Done

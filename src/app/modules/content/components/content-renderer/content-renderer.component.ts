@@ -4,8 +4,9 @@ import {
   Component,
   ElementRef,
   Input,
+  OnChanges,
   OnDestroy,
-  OnInit,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -22,7 +23,7 @@ import { Subject } from 'rxjs';
   styleUrls: ['./content-renderer.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContentRendererComponent implements OnDestroy, AfterViewChecked, OnInit {
+export class ContentRendererComponent implements OnDestroy, AfterViewChecked, OnChanges{
 
   @ViewChild('script', { read: ElementRef })
   public script: ElementRef;
@@ -40,9 +41,11 @@ export class ContentRendererComponent implements OnDestroy, AfterViewChecked, On
     private _htmlRenderer: HtmlRenderer,
   ) {}
 
-  public ngOnInit(): void {
-    this._htmlRenderer.addStyle(this.contentPage.styles, { id: 'contentPageStyles' });
-    this.content = this._sanitizer.bypassSecurityTrustHtml(this.contentPage.content);
+  public ngOnChanges(changes: SimpleChanges): void {
+    if(changes.contentPage.currentValue) {
+      this._htmlRenderer.addStyle(this.contentPage.styles, { id: 'contentPageStyles' });
+      this.content = this._sanitizer.bypassSecurityTrustHtml(this.contentPage.content);
+    }
   }
 
   public ngAfterViewChecked(): void {
