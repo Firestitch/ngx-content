@@ -1,21 +1,21 @@
 import {
-  Component,
-  Inject,
-  OnInit,
-  OnDestroy,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  ViewChildren,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
   QueryList,
+  ViewChildren,
 } from '@angular/core';
 
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
 import { FsTextEditorComponent } from '@firestitch/text-editor';
 
 import { Subject, of } from 'rxjs';
-import { switchMap, tap, takeUntil } from 'rxjs/operators';
+import { switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
