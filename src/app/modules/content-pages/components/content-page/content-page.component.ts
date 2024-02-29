@@ -84,6 +84,7 @@ export class ContentPageComponent implements OnInit, OnDestroy {
       .subscribe((contentPage) => {
         this.contentPage = {
           ...contentPage,
+          path: contentPage.path || '/',
         };
 
         this._cdRef.markForCheck();

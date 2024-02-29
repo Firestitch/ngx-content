@@ -9,6 +9,11 @@
       <a [href]="'/' + row.path" target="_black">/{{row.path}}</a>
     </ng-template>
   </fs-list-column>
+  <fs-list-column name="layout" title="Layout">
+    <ng-template fs-list-cell let-row="row">
+      {{row.contentLayout?.name}}
+    </ng-template>
+  </fs-list-column>
   <fs-list-column name="type" title="Type" [sortable]="true">
     <ng-template fs-list-cell let-row="row">
       {{pageTypes[row.type]}}

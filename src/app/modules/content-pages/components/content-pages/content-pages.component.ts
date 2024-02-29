@@ -130,6 +130,10 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
         },
       ],
       fetch: (query) => {
+        query = {
+          contentLayouts: true,
+        };
+        
         return this._config.loadContentPages(query)
           .pipe(
             map((response: any) => {
