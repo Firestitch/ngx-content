@@ -53,13 +53,15 @@ export class FsContentComponent implements OnInit, OnDestroy {
     this._destroy$.next();
     this._destroy$.complete();
     this._title.setTitle('');
+
+    document.querySelector('#content-style')?.remove();
   }
 
   private _initStyles(): void {
     if(this._config.loadContentStyleCss) {
       this._config.loadContentStyleCss()
         .subscribe((styles) => {
-          this._htmlRenderer.addStyle(styles, { id: 'content-sytle' });
+          this._htmlRenderer.addStyle(styles, { id: 'content-style' });
         });
     }
   }
