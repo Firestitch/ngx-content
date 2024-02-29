@@ -39,17 +39,11 @@ h1 {
   .actions {
     margin-left: 30px;
 
-    button {
+    .mat-stroked-button {
       margin-left: 5px;
     }
   }
 }
-
-// .mat-dialog-actions {
-//   fs-form-dialog-actions {
-//     width: auto;
-//   }
-// }
 
 .title-container {
   display: flex;

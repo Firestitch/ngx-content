@@ -44,7 +44,12 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "highlight.js"
-            ]
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "node_modules/"
+              ]
+            }
           },
           "configurations": {
             "production": {

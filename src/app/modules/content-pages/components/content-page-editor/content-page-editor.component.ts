@@ -39,6 +39,7 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
     content?: string;
     name?: string;
     js?: string;
+    path?: string;
   };
   public focused = null;
   public config: FsContentConfig;

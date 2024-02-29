@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -32,6 +33,7 @@ import { FsContentPagesComponent } from './components/content-pages';
   imports: [
     CommonModule,
     FormsModule,
+    RouterModule,
 
     MatDialogModule,
     MatInputModule,
