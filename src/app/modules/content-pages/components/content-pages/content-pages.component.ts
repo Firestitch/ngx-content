@@ -48,7 +48,7 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(FS_CONTENT_CONFIG) private _config: FsContentConfig,
     private _dialog: MatDialog,
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this._initListConfig();
@@ -132,8 +132,9 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
       fetch: (query) => {
         query = {
           contentLayouts: true,
+          ...query,
         };
-        
+
         return this._config.loadContentPages(query)
           .pipe(
             map((response: any) => {
