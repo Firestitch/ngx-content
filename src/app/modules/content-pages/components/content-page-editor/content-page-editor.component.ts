@@ -102,11 +102,11 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
   }
 
   public save(): void {
-    this.submit()
+    this.submitted()
       .subscribe();
   }
 
-  public submit = (): Observable<any> => {
+  public submitted = (): Observable<any> => {
     this.submitting = true;
 
     return of(null)

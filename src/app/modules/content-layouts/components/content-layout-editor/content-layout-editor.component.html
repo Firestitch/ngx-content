@@ -1,4 +1,4 @@
-<form fsForm [submit]="save" [dirtySubmitButton]="false" [confirm]="false">
+<form fsForm [submit]="submitted" [dirtySubmitButton]="false" [confirm]="false">
   <fs-dialog *fsSkeletonForm="contentLayout">
     <h1 mat-dialog-title>
       <div class="title-container">
@@ -10,7 +10,36 @@
             (click)="openSettings()"
             mat-icon-button>
           <mat-icon>settings</mat-icon>
-        </a>   
+        </a>
+
+        <div class="toggles">
+          <mat-button-toggle-group multiple>
+            <mat-button-toggle value="html" [checked]="editors.html" (change)="editorToggleChange($event)">HTML</mat-button-toggle>
+            <mat-button-toggle value="scss" [checked]="editors.scss" (change)="editorToggleChange($event)">SCSS</mat-button-toggle>
+            <!-- <mat-button-toggle value="js" [checked]="editors.js" (change)="editorToggleChange($event)">JS</mat-button-toggle> -->
+            <mat-button-toggle value="globalScss" [checked]="editors.globalScss" (change)="editorToggleChange($event)">Global SCSS</mat-button-toggle>
+          </mat-button-toggle-group>      
+        </div>
+
+        <div class="actions">
+          <button
+              #submit
+              mat-stroked-button
+              color="primary"
+              [disabled]="!editor?.hasChanges || submitting"
+              [matTooltip]="isMac ? 'cmd+s' : 'ctrl+s'"
+              type="button"
+              (click)="save()">  
+            Save
+          </button>
+
+          <button 
+              mat-stroked-button
+              (click)="close()"
+              type="button">  
+            Done
+          </button>
+        </div>
       </div>
     </h1>
     <div mat-dialog-content>
@@ -25,7 +54,7 @@
       </app-editor>
     </div>
 
-    <div mat-dialog-actions>
+    <!-- <div mat-dialog-actions>
       <button 
         mat-button
           color="primary"
@@ -40,6 +69,6 @@
           <mat-button-toggle value="globalScss" [checked]="editors.globalScss" (change)="editorToggleChange($event)">Global SCSS</mat-button-toggle>
         </mat-button-toggle-group>      
       </div>
-    </div>
+    </div> -->
   </fs-dialog>
 </form>

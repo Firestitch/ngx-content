@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { FsDateModule } from '@firestitch/date';
 import { FsDialogModule } from '@firestitch/dialog';
@@ -39,6 +40,7 @@ import { FsContentLayoutsComponent } from './components/content-layouts';
     MatIconModule,
     MatSelectModule,
     MatButtonToggleModule,
+    MatTooltipModule,
 
     FsListModule,
     FsDateModule,

@@ -28,14 +28,31 @@ fs-dialog {
   }
 }
 
-.mat-dialog-actions {
+h1 {
   .toggles {
     display: flex;
     justify-content: flex-end;
     justify-self: baseline;
-    flex: 1;
+    font-size: 13px;
+  }
+  
+  .actions {
+    margin-left: 30px;
+
+    .mat-stroked-button {
+      margin-left: 5px;
+    }
   }
 }
+
+// .mat-dialog-actions {
+//   .toggles {
+//     display: flex;
+//     justify-content: flex-end;
+//     justify-self: baseline;
+//     flex: 1;
+//   }
+// }
 
 .title-container {
   display: flex;
