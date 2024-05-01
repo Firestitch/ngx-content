@@ -1,7 +1,11 @@
 <fs-list [config]="listConfig">
   <fs-list-column name="name" title="Name" [sortable]="true">
     <ng-template fs-list-cell let-row="row">
-      <a (click)="openEditor(row)">{{row.name}}</a>
+      <a *ngIf="row.state !== 'deleted'; else name" (click)="openEditor(row)">
+        <ng-container [ngTemplateOutlet]="name"></ng-container>
+      </a>
+
+      <ng-template #name>{{row.name}}</ng-template>
     </ng-template>
   </fs-list-column>
   <fs-list-column name="path" title="Path" [sortable]="true">
