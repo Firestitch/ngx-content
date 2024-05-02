@@ -4,13 +4,15 @@
       <a *ngIf="row.state !== 'deleted'; else name" (click)="openEditor(row)">
         <ng-container [ngTemplateOutlet]="name"></ng-container>
       </a>
-
       <ng-template #name>{{row.name}}</ng-template>
     </ng-template>
   </fs-list-column>
   <fs-list-column name="path" title="Path" [sortable]="true">
     <ng-template fs-list-cell let-row="row">
-      <a [href]="'/' + row.path" target="_black">/{{row.path}}</a>
+      <a *ngIf="row.state !== 'deleted'; else path"  [href]="'/' + row.path" target="_black">
+        <ng-container [ngTemplateOutlet]="path"></ng-container>
+      </a>
+      <ng-template #path>/{{row.path}}</ng-template>
     </ng-template>
   </fs-list-column>
   <fs-list-column name="layout" title="Layout">
