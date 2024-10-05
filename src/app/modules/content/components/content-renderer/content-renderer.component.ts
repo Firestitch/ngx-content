@@ -80,7 +80,7 @@ export class ContentRendererComponent implements OnDestroy, AfterViewChecked, On
 
   public ngOnDestroy(): void {
     this.removeStyles();
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 
