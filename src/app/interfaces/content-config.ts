@@ -11,7 +11,7 @@ export interface FsContentConfig {
   loadContentPage: (contentPageId: number) => Observable<FsContentPage>;
   saveContentPage: (contentPage: FsContentPage) => Observable<FsContentPage>;
   deleteContentPage: (contentPage: FsContentPage) => Observable<FsContentPage>;
-  loadContentLayouts: (query?: any) => Observable<FsContentLayout[]>;
+  loadContentLayouts: (query?: any) => Observable<{ contentLayouts: FsContentLayout[]; paging: any }>;
   loadContentLayout: (contentLayoutId) => Observable<FsContentLayout>;
   loadContentStyleCss?: () => Observable<string>;
   loadContentStyle: () => Observable<FsContentStyle>;

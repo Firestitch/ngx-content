@@ -84,7 +84,6 @@ export class FsContentLayoutsComponent implements OnInit, OnDestroy {
 
   private _initListConfig(): void {
     this.listConfig = {
-      paging: false,
       filters: [
         {
           name: 'keyword',
@@ -119,8 +118,8 @@ export class FsContentLayoutsComponent implements OnInit, OnDestroy {
       fetch: (query) => {
         return this._config.loadContentLayouts(query)
           .pipe(
-            map((contentLayouts: any) => {
-              return { data: contentLayouts  };
+            map((response: any) => {
+              return { data: response.contentLayouts, paging: response.paging  };
             }),
           );
       },

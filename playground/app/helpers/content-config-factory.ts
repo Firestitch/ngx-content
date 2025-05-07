@@ -40,7 +40,10 @@ export function contentConfigFactory(): FsContentConfig {
       return of(contentPage);
     },
     loadContentLayouts: (query) => {
-      return of(ContentLayouts);
+      return of({
+        contentLayouts: ContentLayouts,
+        paging: {},
+      });
     },
     saveContentLayout: (contentLayout: FsContentLayout) => {
       return of(contentLayout);
