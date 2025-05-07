@@ -2,7 +2,7 @@
   "name": "@firestitch/content",
   "title": "Content",
   "description": "@firestitch/content",
-  "version": "18.0.2",
+  "version": "18.0.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-content"
@@ -46,7 +46,7 @@
     "@firestitch/chip": "^18.0.2",
     "@firestitch/clear": "^18.0.6",
     "@firestitch/common": "^18.0.0",
-    "@firestitch/component-tools": "^18.0.13",
+    "@firestitch/component-tools": "^18.0.16",
     "@firestitch/core": "^18.0.1",
     "@firestitch/date": "^18.0.1",
     "@firestitch/datepicker": "^18.0.2",
