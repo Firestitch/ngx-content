@@ -23,18 +23,17 @@ import { FsListModule } from '@firestitch/list';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsTextEditorModule } from '@firestitch/text-editor';
 
-import { FsContentEditorModule } from '../editor';
+
 
 import { ContentPageEditorComponent } from './components';
 import { ContentPageComponent } from './components/content-page';
 import { FsContentPagesComponent } from './components/content-pages';
 
 @NgModule({
-  imports: [
+    imports: [
     CommonModule,
     FormsModule,
     RouterModule,
-
     MatDialogModule,
     MatInputModule,
     MatFormFieldModule,
@@ -44,7 +43,6 @@ import { FsContentPagesComponent } from './components/content-pages';
     MatSelectModule,
     MatButtonToggleModule,
     MatTooltipModule,
-
     FsListModule,
     FsDateModule,
     FsCommonModule,
@@ -54,17 +52,13 @@ import { FsContentPagesComponent } from './components/content-pages';
     FsHtmlEditorModule,
     FsDialogModule,
     FsTextEditorModule,
-
-    FsContentEditorModule,
-  ],
-  exports: [
-    FsContentPagesComponent,
-  ],
-  declarations: [
     FsContentPagesComponent,
     ContentPageComponent,
     ContentPageEditorComponent,
-  ],
+],
+    exports: [
+        FsContentPagesComponent,
+    ],
 })
 export class FsContentPagesModule {
   public static forRoot(): ModuleWithProviders<FsContentPagesModule> {

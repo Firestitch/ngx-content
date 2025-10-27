@@ -10,7 +10,7 @@ import {
 import { MatDialog } from '@angular/material/dialog';
 
 import { ItemType } from '@firestitch/filter';
-import { FsListComponent, FsListConfig } from '@firestitch/list';
+import { FsListComponent, FsListConfig, FsListModule } from '@firestitch/list';
 
 import { Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
@@ -19,13 +19,21 @@ import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
 import { ContentLayoutComponent } from '../../components/content-layout';
 import { ContentLayoutEditorComponent } from '../content-layout-editor/content-layout-editor.component';
+import { NgTemplateOutlet } from '@angular/common';
+import { FsDateModule } from '@firestitch/date';
 
 
 @Component({
-  selector: 'fs-content-layouts',
-  templateUrl: './content-layouts.component.html',
-  styleUrls: ['./content-layouts.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-content-layouts',
+    templateUrl: './content-layouts.component.html',
+    styleUrls: ['./content-layouts.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsListModule,
+        NgTemplateOutlet,
+        FsDateModule,
+    ],
 })
 export class FsContentLayoutsComponent implements OnInit, OnDestroy {
 

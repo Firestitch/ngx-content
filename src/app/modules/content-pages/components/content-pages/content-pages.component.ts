@@ -13,7 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { index } from '@firestitch/common';
 import { ItemType } from '@firestitch/filter';
 import { FsHtmlEditorConfig } from '@firestitch/html-editor';
-import { FsListComponent, FsListConfig } from '@firestitch/list';
+import { FsListComponent, FsListConfig, FsListModule } from '@firestitch/list';
 
 import { Observable, Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
@@ -25,13 +25,21 @@ import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
 import { ContentPageEditorComponent } from '../content-page-editor';
 import { ContentPageComponent } from '../content-page/content-page.component';
+import { NgTemplateOutlet } from '@angular/common';
+import { FsDateModule } from '@firestitch/date';
 
 
 @Component({
-  selector: 'fs-content-pages',
-  templateUrl: './content-pages.component.html',
-  styleUrls: ['./content-pages.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-content-pages',
+    templateUrl: './content-pages.component.html',
+    styleUrls: ['./content-pages.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsListModule,
+        NgTemplateOutlet,
+        FsDateModule,
+    ],
 })
 export class FsContentPagesComponent implements OnInit, OnDestroy {
 

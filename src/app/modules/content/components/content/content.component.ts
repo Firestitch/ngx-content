@@ -17,13 +17,16 @@ import { filter, takeUntil } from 'rxjs/operators';
 
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
+import { ContentRendererComponent } from '../content-renderer/content-renderer.component';
 
 
 @Component({
-  selector: 'fs-content',
-  templateUrl: './content.component.html',
-  styleUrls: ['./content.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-content',
+    templateUrl: './content.component.html',
+    styleUrls: ['./content.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [ContentRendererComponent],
 })
 export class FsContentComponent implements OnInit, OnDestroy {
 

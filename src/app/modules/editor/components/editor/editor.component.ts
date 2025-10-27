@@ -11,20 +11,36 @@ import {
 
 
 import { FsMessage } from '@firestitch/message';
-import { FsTextEditorConfig } from '@firestitch/text-editor';
+import { FsTextEditorConfig, FsTextEditorModule } from '@firestitch/text-editor';
 
 import { Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { EditorType } from '../../../../enums';
 import { FsContentConfig } from '../../../../interfaces';
+import { AngularSplitModule } from 'angular-split';
+import { EditorLabelComponent } from '../editor-label/editor-label.component';
+import { FormsModule } from '@angular/forms';
+import { FsFormModule } from '@firestitch/form';
+import { FsCommonModule } from '@firestitch/common';
+import { FsSkeletonModule } from '@firestitch/skeleton';
 
 
 @Component({
-  selector: 'app-editor',
-  templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-editor',
+    templateUrl: './editor.component.html',
+    styleUrls: ['./editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        AngularSplitModule,
+        EditorLabelComponent,
+        FsTextEditorModule,
+        FormsModule,
+        FsFormModule,
+        FsCommonModule,
+        FsSkeletonModule,
+    ],
 })
 export class EditorComponent implements OnInit, OnDestroy {
 

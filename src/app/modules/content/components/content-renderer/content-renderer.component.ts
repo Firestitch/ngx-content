@@ -18,10 +18,11 @@ import { Subject } from 'rxjs';
 
 
 @Component({
-  selector: 'fs-content-renderer',
-  templateUrl: './content-renderer.component.html',
-  styleUrls: ['./content-renderer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-content-renderer',
+    templateUrl: './content-renderer.component.html',
+    styleUrls: ['./content-renderer.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
 })
 export class ContentRendererComponent implements OnDestroy, AfterViewChecked, OnChanges{
 

@@ -8,8 +8,8 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { MatButtonToggleChange } from '@angular/material/button-toggle';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonToggleChange, MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
 import { FsPrompt } from '@firestitch/prompt';
@@ -21,12 +21,41 @@ import { EditorType } from '../../../../enums';
 import { FsContentConfig } from '../../../../interfaces';
 import { EditorComponent } from '../../../editor/components/editor';
 import { ContentPageComponent } from '../content-page/content-page.component';
+import { FormsModule } from '@angular/forms';
+import { FsFormModule } from '@firestitch/form';
+import { FsSkeletonModule } from '@firestitch/skeleton';
+import { FsDialogModule } from '@firestitch/dialog';
+import { MatIconAnchor, MatButton, MatAnchor } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatTooltip } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { EditorComponent as EditorComponent_1 } from '../../../editor/components/editor/editor.component';
 
 
 @Component({
-  templateUrl: './content-page-editor.component.html',
-  styleUrls: ['./content-page-editor.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './content-page-editor.component.html',
+    styleUrls: ['./content-page-editor.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FormsModule,
+        FsFormModule,
+        FsSkeletonModule,
+        FsDialogModule,
+        MatDialogTitle,
+        MatIconAnchor,
+        MatIcon,
+        MatButtonToggleGroup,
+        MatButtonToggle,
+        MatButton,
+        MatTooltip,
+        MatAnchor,
+        RouterLink,
+        CdkScrollable,
+        MatDialogContent,
+        EditorComponent_1,
+    ],
 })
 export class ContentPageEditorComponent implements OnInit, OnDestroy {
 

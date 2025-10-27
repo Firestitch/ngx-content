@@ -12,20 +12,30 @@ import {
 
 import { FsFormDirective } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
-import { FsTextEditorComponent } from '@firestitch/text-editor';
+import { FsTextEditorComponent, FsTextEditorModule } from '@firestitch/text-editor';
 
 import { Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
+import { FsSkeletonModule } from '@firestitch/skeleton';
+import { FormsModule } from '@angular/forms';
+import { FsCommonModule } from '@firestitch/common';
 
 
 @Component({
-  selector: 'fs-content-style',
-  templateUrl: './content-style.component.html',
-  styleUrls: ['./content-style.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-content-style',
+    templateUrl: './content-style.component.html',
+    styleUrls: ['./content-style.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsSkeletonModule,
+        FsTextEditorModule,
+        FormsModule,
+        FsCommonModule,
+    ],
 })
 export class ContentStyleComponent implements OnInit, OnDestroy {
 

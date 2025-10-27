@@ -9,7 +9,7 @@ import {
   ViewChildren,
 } from '@angular/core';
 
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
 import { FsTextEditorComponent } from '@firestitch/text-editor';
@@ -19,12 +19,33 @@ import { switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
 import { FsContentConfig } from '../../../../interfaces';
+import { FsSkeletonModule } from '@firestitch/skeleton';
+import { FormsModule } from '@angular/forms';
+import { FsFormModule } from '@firestitch/form';
+import { FsDialogModule } from '@firestitch/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 
 @Component({
-  templateUrl: './content-layout.component.html',
-  styleUrls: ['./content-layout.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './content-layout.component.html',
+    styleUrls: ['./content-layout.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsSkeletonModule,
+        FormsModule,
+        FsFormModule,
+        FsDialogModule,
+        MatDialogTitle,
+        CdkScrollable,
+        MatDialogContent,
+        MatFormField,
+        MatLabel,
+        MatInput,
+        MatDialogActions,
+    ],
 })
 export class ContentLayoutComponent implements OnInit, OnDestroy {
 
