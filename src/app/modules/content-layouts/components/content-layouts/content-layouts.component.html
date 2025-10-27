@@ -1,9 +1,13 @@
 <fs-list [config]="listConfig">
   <fs-list-column name="name" title="Name" [sortable]="true">
     <ng-template fs-list-cell let-row="row">
-      <a *ngIf="row.state !== 'deleted'; else name" (click)="openEditor(row)">
-        <ng-container [ngTemplateOutlet]="name"></ng-container>
-      </a>
+      @if (row.state !== 'deleted') {
+        <a (click)="openEditor(row)">
+          <ng-container [ngTemplateOutlet]="name"></ng-container>
+        </a>
+      } @else {
+        {{row.name}}
+      }
 
       <ng-template #name>{{row.name}}</ng-template>
     </ng-template>

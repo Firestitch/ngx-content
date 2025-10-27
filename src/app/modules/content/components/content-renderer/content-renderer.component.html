@@ -1,2 +1,4 @@
-<div *ngIf="content" [innerHTML]="content"></div>
+@if (content) {
+  <div [innerHTML]="content"></div>
+}
 <span #script></span>
