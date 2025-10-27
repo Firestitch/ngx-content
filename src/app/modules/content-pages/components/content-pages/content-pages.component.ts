@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
@@ -42,6 +34,9 @@ import { FsDateModule } from '@firestitch/date';
     ],
 })
 export class FsContentPagesComponent implements OnInit, OnDestroy {
+  private _config = inject<FsContentConfig>(FS_CONTENT_CONFIG);
+  private _dialog = inject(MatDialog);
+
 
   @Input() public htmlEditorConfig: FsHtmlEditorConfig;
 
@@ -52,11 +47,6 @@ export class FsContentPagesComponent implements OnInit, OnDestroy {
   public pageTypes = index(PageTypes, 'value', 'name');
 
   private _destroy$ = new Subject<void>();
-
-  constructor(
-    @Inject(FS_CONTENT_CONFIG) private _config: FsContentConfig,
-    private _dialog: MatDialog,
-  ) { }
 
   public ngOnInit(): void {
     this._initListConfig();

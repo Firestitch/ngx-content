@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 
 import { MatButtonToggleChange, MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent } from '@angular/material/dialog';
@@ -58,6 +50,13 @@ import { EditorComponent as EditorComponent_1 } from '../../../editor/components
     ],
 })
 export class ContentPageEditorComponent implements OnInit, OnDestroy {
+  private _data = inject(MAT_DIALOG_DATA);
+  private _dialogRef = inject<MatDialogRef<ContentPageEditorComponent>>(MatDialogRef);
+  private _message = inject(FsMessage);
+  private _dialog = inject(MatDialog);
+  private _cdRef = inject(ChangeDetectorRef);
+  private _prompt = inject(FsPrompt);
+
 
   @ViewChild(EditorComponent)
   public editor: EditorComponent;
@@ -88,18 +87,6 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
   public submitting: boolean;
 
   private _destroy$ = new Subject<void>();
-
-  constructor(
-    @Inject(MAT_DIALOG_DATA) private _data: {
-      contentPage: any;
-      contentConfig: FsContentConfig;
-    },
-    private _dialogRef: MatDialogRef<ContentPageEditorComponent>,
-    private _message: FsMessage,
-    private _dialog: MatDialog,
-    private _cdRef: ChangeDetectorRef,
-    private _prompt: FsPrompt,
-  ) { }
 
   public ngOnInit(): void {
     this._dialogRef.addPanelClass('fs-content-editor-overlay-pane');

@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, inject } from '@angular/core';
 
 
 import { FsMessage } from '@firestitch/message';
@@ -43,6 +34,9 @@ import { FsSkeletonModule } from '@firestitch/skeleton';
     ],
 })
 export class EditorComponent implements OnInit, OnDestroy {
+  private _cdRef = inject(ChangeDetectorRef);
+  private _message = inject(FsMessage);
+
 
   @Input() public showHtml = false;
   @Input() public showScss = false;
@@ -75,11 +69,6 @@ export class EditorComponent implements OnInit, OnDestroy {
   public jsConfig: FsTextEditorConfig;
 
   private _destroy$ = new Subject<void>();
-
-  constructor(
-    private _cdRef: ChangeDetectorRef,
-    private _message: FsMessage,
-  ) { }
 
   public ngOnInit(): void {
     this.initTextEditors();

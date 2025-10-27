@@ -1,14 +1,4 @@
-import {
-  AfterViewChecked,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
@@ -25,6 +15,11 @@ import { Subject } from 'rxjs';
     standalone: true,
 })
 export class ContentRendererComponent implements OnDestroy, AfterViewChecked, OnChanges{
+  private _sanitizer = inject(DomSanitizer);
+  private _router = inject(Router);
+  private _el = inject(ElementRef);
+  private _htmlRenderer = inject(HtmlRenderer);
+
 
   @ViewChild('script', { read: ElementRef })
   public script: ElementRef;
@@ -34,13 +29,6 @@ export class ContentRendererComponent implements OnDestroy, AfterViewChecked, On
   public content: SafeHtml;
 
   private _destroy$ = new Subject();
-
-  constructor(
-    private _sanitizer: DomSanitizer,
-    private _router: Router,
-    private _el: ElementRef,
-    private _htmlRenderer: HtmlRenderer,
-  ) {}
 
   public ngOnChanges(changes: SimpleChanges): void {
     if(changes.contentPage.currentValue) {

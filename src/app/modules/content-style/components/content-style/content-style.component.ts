@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  Input,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 
 
 import { FsFormDirective } from '@firestitch/form';
@@ -38,6 +29,10 @@ import { FsCommonModule } from '@firestitch/common';
     ],
 })
 export class ContentStyleComponent implements OnInit, OnDestroy {
+  private _config = inject<FsContentConfig>(FS_CONTENT_CONFIG);
+  private _message = inject(FsMessage);
+  private _cdRef = inject(ChangeDetectorRef);
+
 
   @ViewChild(FsTextEditorComponent)
   public textEditors: FsTextEditorComponent;
@@ -55,12 +50,6 @@ export class ContentStyleComponent implements OnInit, OnDestroy {
   };
 
   private _destroy$ = new Subject<void>();
-
-  constructor(
-    @Inject(FS_CONTENT_CONFIG) private _config: FsContentConfig,
-    private _message: FsMessage,
-    private _cdRef: ChangeDetectorRef,
-  ) {}
 
   public ngOnInit(): void {
     this.styleConfig.height = this.height;

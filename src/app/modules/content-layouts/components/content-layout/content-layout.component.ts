@@ -1,13 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChildren,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
 
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 
@@ -48,6 +39,12 @@ import { MatInput } from '@angular/material/input';
     ],
 })
 export class ContentLayoutComponent implements OnInit, OnDestroy {
+  private _config = inject<FsContentConfig>(FS_CONTENT_CONFIG);
+  private _data = inject(MAT_DIALOG_DATA);
+  private _dialogRef = inject<MatDialogRef<ContentLayoutComponent>>(MatDialogRef);
+  private _message = inject(FsMessage);
+  private _cdRef = inject(ChangeDetectorRef);
+
 
   @ViewChildren(FsTextEditorComponent)
   public textEditors: QueryList<FsTextEditorComponent>;
@@ -56,14 +53,6 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
   public editors = { content: true, styles: true };
 
   private _destroy$ = new Subject<void>();
-
-  constructor(    
-    @Inject(FS_CONTENT_CONFIG) private _config: FsContentConfig,
-    @Inject(MAT_DIALOG_DATA) private _data: any,
-    private _dialogRef: MatDialogRef<ContentLayoutComponent>,
-    private _message: FsMessage,
-    private _cdRef: ChangeDetectorRef,
-  ) {}
 
   public ngOnInit(): void {
     this._fetchData();

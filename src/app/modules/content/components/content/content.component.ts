@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ElementRef,
-  Inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 
@@ -29,19 +21,17 @@ import { ContentRendererComponent } from '../content-renderer/content-renderer.c
     imports: [ContentRendererComponent],
 })
 export class FsContentComponent implements OnInit, OnDestroy {
+  private _config = inject<FsContentConfig>(FS_CONTENT_CONFIG);
+  private _title = inject(Title);
+  private _cdRef = inject(ChangeDetectorRef);
+  private _router = inject(Router);
+  private _el = inject(ElementRef);
+  private _htmlRenderer = inject(HtmlRenderer);
+
 
   public contentPage;
 
   private _destroy$ = new Subject();
-
-  constructor(
-    @Inject(FS_CONTENT_CONFIG) private _config: FsContentConfig,
-    private _title: Title,
-    private _cdRef: ChangeDetectorRef,
-    private _router: Router,
-    private _el: ElementRef,
-    private _htmlRenderer: HtmlRenderer,
-  ) {}
 
   public ngOnInit(): void {
     this._initContent();

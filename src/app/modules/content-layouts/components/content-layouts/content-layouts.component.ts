@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 
 import { MatDialog } from '@angular/material/dialog';
 
@@ -36,6 +29,9 @@ import { FsDateModule } from '@firestitch/date';
     ],
 })
 export class FsContentLayoutsComponent implements OnInit, OnDestroy {
+  private _config = inject<FsContentConfig>(FS_CONTENT_CONFIG);
+  private _dialog = inject(MatDialog);
+
 
   @ViewChild(FsListComponent)
   public listComponent: FsListComponent;
@@ -43,11 +39,6 @@ export class FsContentLayoutsComponent implements OnInit, OnDestroy {
   public listConfig: FsListConfig;
 
   private _destroy$ = new Subject<void>();
-
-  constructor(
-    @Inject(FS_CONTENT_CONFIG) private _config: FsContentConfig,
-    private _dialog: MatDialog,
-  ) {}
 
   public ngOnInit(): void {
     this._initListConfig();
