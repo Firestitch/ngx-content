@@ -17,7 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { FsFormModule } from '@firestitch/form';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsDialogModule } from '@firestitch/dialog';
-import { MatButtonModule } from '@angular/material/button';
+import { MatAnchor, MatButton, MatIconAnchor, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { CdkScrollable } from '@angular/cdk/scrolling';
@@ -35,7 +35,10 @@ import { EditorComponent as EditorComponent_1 } from '../../../editor/components
         FsSkeletonModule,
         FsDialogModule,
         MatDialogTitle,
-        MatButtonModule,
+        MatButton,
+        MatAnchor,
+        MatIconAnchor,
+        MatIconButton,
         MatIcon,
         MatButtonToggleGroup,
         MatButtonToggle,
