@@ -1,0 +1,8 @@
+<mat-button-toggle-group multiple>
+  <mat-button-toggle value="html" [checked]="editors[EditorType.Html]" (change)="toggleChange.emit($event)">HTML</mat-button-toggle>
+  <mat-button-toggle value="scss" [checked]="editors[EditorType.Scss]" (change)="toggleChange.emit($event)">SCSS</mat-button-toggle>
+  @if (showJs) {
+    <mat-button-toggle value="js" [checked]="editors[EditorType.Js]" (change)="toggleChange.emit($event)">JS</mat-button-toggle>
+  }
+  <mat-button-toggle value="globalScss" [checked]="editors[EditorType.GlobalScss]" (change)="toggleChange.emit($event)">Global SCSS</mat-button-toggle>
+</mat-button-toggle-group>

@@ -1,10 +1,15 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
-import { MatButtonToggleChange, MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent } from '@angular/material/dialog';
+import { CdkScrollable } from '@angular/cdk/scrolling';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 
+import { FsDialogModule } from '@firestitch/dialog';
+import { FsFormModule } from '@firestitch/form';
 import { FsMessage } from '@firestitch/message';
 import { FsPrompt } from '@firestitch/prompt';
+import { FsSkeletonModule } from '@firestitch/skeleton';
 
 import { Subject, fromEvent, of, throwError } from 'rxjs';
 import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -12,50 +17,31 @@ import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { EditorType } from '../../../../enums';
 import { FsContentConfig } from '../../../../interfaces';
 import { EditorComponent } from '../../../editor/components/editor';
-import { ContentLayoutComponent } from '../content-layout/content-layout.component';
-import { FormsModule } from '@angular/forms';
-import { FsFormModule } from '@firestitch/form';
-import { FsSkeletonModule } from '@firestitch/skeleton';
-import { FsDialogModule } from '@firestitch/dialog';
-import { MatAnchor, MatButton, MatIconAnchor, MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
-import { CdkScrollable } from '@angular/cdk/scrolling';
 import { EditorComponent as EditorComponent_1 } from '../../../editor/components/editor/editor.component';
+import { EditorTogglesComponent } from '../../../editor/components/editor-toggles';
+import { EditorActionsComponent } from '../../../editor/components/editor-actions';
+import { ContentLayoutComponent } from '../content-layout/content-layout.component';
 
 
 @Component({
-    templateUrl: './content-layout-editor.component.html',
-    styleUrls: ['./content-layout-editor.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        FormsModule,
-        FsFormModule,
-        FsSkeletonModule,
-        FsDialogModule,
-        MatDialogTitle,
-        MatButton,
-        MatAnchor,
-        MatIconAnchor,
-        MatIconButton,
-        MatIcon,
-        MatButtonToggleGroup,
-        MatButtonToggle,
-        MatTooltip,
-        CdkScrollable,
-        MatDialogContent,
-        EditorComponent_1,
-    ],
+  templateUrl: './content-layout-editor.component.html',
+  styleUrls: ['./content-layout-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FormsModule,
+    FsFormModule,
+    FsSkeletonModule,
+    FsDialogModule,
+    MatDialogTitle,
+    EditorTogglesComponent,
+    EditorActionsComponent,
+    CdkScrollable,
+    MatDialogContent,
+    EditorComponent_1,
+  ],
 })
 export class ContentLayoutEditorComponent implements OnInit, OnDestroy {
-  private _data = inject(MAT_DIALOG_DATA);
-  private _dialogRef = inject<MatDialogRef<ContentLayoutEditorComponent>>(MatDialogRef);
-  private _message = inject(FsMessage);
-  private _dialog = inject(MatDialog);
-  private _cdRef = inject(ChangeDetectorRef);
-  private _prompt = inject(FsPrompt);
-
 
   @ViewChild(EditorComponent)
   public editor: EditorComponent;
@@ -84,6 +70,12 @@ export class ContentLayoutEditorComponent implements OnInit, OnDestroy {
   };
 
   private _destroy$ = new Subject<void>();
+  private _data = inject(MAT_DIALOG_DATA);
+  private _dialogRef = inject<MatDialogRef<ContentLayoutEditorComponent>>(MatDialogRef);
+  private _message = inject(FsMessage);
+  private _dialog = inject(MatDialog);
+  private _cdRef = inject(ChangeDetectorRef);
+  private _prompt = inject(FsPrompt);
 
   public ngOnInit(): void {
     this._dialogRef.addPanelClass('fs-content-editor-overlay-pane');

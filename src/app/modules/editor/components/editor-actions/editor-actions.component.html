@@ -1,0 +1,34 @@
+<button
+    type="button"
+    mat-icon-button
+    (click)="settings.emit()">
+  <mat-icon>settings</mat-icon>
+</button>
+
+<div class="actions">
+  <button
+      mat-stroked-button
+      color="primary"
+      type="button"
+      [disabled]="saveDisabled"
+      [matTooltip]="isMac ? 'cmd+s' : 'ctrl+s'"
+      (click)="save.emit()">
+    Save
+  </button>
+
+  @if (previewPath !== null) {
+    <button
+        mat-stroked-button
+        type="button"
+        (click)="preview.emit()">
+      Preview
+    </button>
+  }
+
+  <button
+      mat-stroked-button
+      type="button"
+      (click)="done.emit()">
+    Done
+  </button>
+</div>

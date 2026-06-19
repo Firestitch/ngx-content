@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 
-import { MatButtonToggleChange, MatButtonToggleGroup, MatButtonToggle } from '@angular/material/button-toggle';
+import { MatButtonToggleChange } from '@angular/material/button-toggle';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatDialogTitle, MatDialogContent } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
@@ -17,12 +17,10 @@ import { FormsModule } from '@angular/forms';
 import { FsFormModule } from '@firestitch/form';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FsDialogModule } from '@firestitch/dialog';
-import { MatAnchor, MatButton, MatIconAnchor, MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { EditorComponent as EditorComponent_1 } from '../../../editor/components/editor/editor.component';
+import { EditorTogglesComponent } from '../../../editor/components/editor-toggles';
+import { EditorActionsComponent } from '../../../editor/components/editor-actions';
 
 
 @Component({
@@ -36,15 +34,8 @@ import { EditorComponent as EditorComponent_1 } from '../../../editor/components
         FsSkeletonModule,
         FsDialogModule,
         MatDialogTitle,
-        MatButton,
-        MatAnchor,
-        MatIconAnchor,
-        MatIconButton,
-        MatIcon,
-        MatButtonToggleGroup,
-        MatButtonToggle,
-        MatTooltip,
-        RouterLink,
+        EditorTogglesComponent,
+        EditorActionsComponent,
         CdkScrollable,
         MatDialogContent,
         EditorComponent_1,
@@ -209,6 +200,10 @@ export class ContentPageEditorComponent implements OnInit, OnDestroy {
           this._dialogRef.close();
         }
       });
+  }
+
+  public openPreview(): void {
+    window.open(this.contentPage.path, '_blank');
   }
 
   public openSettings(): void {

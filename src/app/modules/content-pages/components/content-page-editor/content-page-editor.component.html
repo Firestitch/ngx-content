@@ -4,50 +4,26 @@
       <div class="title-container">
         <div class="title">
           Page Editor
-          <div class="small">{{contentPage.name}}</div>   
+          <div class="small">{{contentPage.name}}</div>
         </div>
-        <a
-            (click)="openSettings()"
-            mat-icon-button>
-          <mat-icon>settings</mat-icon>
-        </a>
 
         <div class="toggles">
-          <mat-button-toggle-group multiple>
-            <mat-button-toggle value="html" [checked]="editors.html" (change)="editorToggleChange($event)">HTML</mat-button-toggle>
-            <mat-button-toggle value="scss" [checked]="editors.scss" (change)="editorToggleChange($event)">SCSS</mat-button-toggle>
-            <mat-button-toggle value="js" [checked]="editors.js" (change)="editorToggleChange($event)">JS</mat-button-toggle>
-            <mat-button-toggle value="globalScss" [checked]="editors.globalScss" (change)="editorToggleChange($event)">Global SCSS</mat-button-toggle>
-          </mat-button-toggle-group>      
+          <app-editor-toggles
+            [editors]="editors"
+            [showJs]="true"
+            (toggleChange)="editorToggleChange($event)">
+          </app-editor-toggles>
         </div>
 
-        <div class="actions">
-          <button
-              #submit
-              mat-stroked-button
-              color="primary"
-              [disabled]="!editor?.hasChanges || submitting"
-              [matTooltip]="isMac ? 'cmd+s' : 'ctrl+s'"
-              type="button"
-              (click)="save()">  
-            Save
-          </button>
-
-          <a 
-              mat-stroked-button
-              target="_blank"
-              [routerLink]="contentPage.path"
-              type="button">  
-            Preview
-          </a>
-
-          <button 
-              mat-stroked-button
-              (click)="close()"
-              type="button">  
-            Done
-          </button>
-        </div>
+        <app-editor-actions
+          [saveDisabled]="!editor?.hasChanges || submitting"
+          [isMac]="isMac"
+          [previewPath]="contentPage.path"
+          (settings)="openSettings()"
+          (save)="save()"
+          (preview)="openPreview()"
+          (done)="close()">
+        </app-editor-actions>
       </div>
     </h1>
     <div mat-dialog-content>
