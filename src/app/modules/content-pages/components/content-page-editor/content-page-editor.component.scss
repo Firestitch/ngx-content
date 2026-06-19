@@ -1,9 +1,16 @@
 ::ng-deep {
   .fs-content-editor-overlay-pane {
-    .mat-dialog-container {
+    .mat-dialog-container,
+    .mat-mdc-dialog-container {
       border-radius: 0;
-    }   
-  }   
+      height: 100%;
+    }
+
+    .mdc-dialog__container,
+    .mat-mdc-dialog-surface {
+      height: 100%;
+    }
+  }
 }
 
 form {
@@ -16,10 +23,14 @@ fs-dialog {
   flex-direction: column;  
 
   ::ng-deep {
-    .mat-dialog-content {
+    .mat-dialog-content,
+    .mat-mdc-dialog-content {
       max-height: none;
       flex: 1;
+      min-height: 0;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     .mat-button-toggle-label-content {
