@@ -1,16 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
-import { FsTextEditorComponent } from '@firestitch/text-editor';
 
-import { Subject, of } from 'rxjs';
-import { switchMap, takeUntil, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 import { PageTypes } from '../../../../consts';
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
-import { FsContentConfig } from '../../../../interfaces';
+import { FsContentConfig, FsContentLayout, FsContentPage } from '../../../../interfaces';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FormsModule } from '@angular/forms';
 import { FsFormModule } from '@firestitch/form';
@@ -43,36 +42,28 @@ import { MatInput } from '@angular/material/input';
         MatDialogActions,
     ],
 })
-export class ContentPageComponent implements OnInit, OnDestroy {
+export class ContentPageComponent implements OnInit {
+
+  public contentPage = signal<FsContentPage>(null);
+  public contentLayouts = signal<FsContentLayout[]>(null);
+  public PageTypes = PageTypes;
+
   private _config = inject<FsContentConfig>(FS_CONTENT_CONFIG);
   private _data = inject(MAT_DIALOG_DATA);
   private _dialogRef = inject<MatDialogRef<ContentPageComponent>>(MatDialogRef);
   private _message = inject(FsMessage);
-  private _cdRef = inject(ChangeDetectorRef);
+  private _destroyRef = inject(DestroyRef);
 
-
-  @ViewChildren(FsTextEditorComponent)
-  public textEditors: QueryList<FsTextEditorComponent>;
-
-  public contentPage = null;
-  public PageTypes = PageTypes;
-  public contentLayouts;
-  public editors = { content: true, styles: true };
-
-  private _destroy$ = new Subject<void>();
+  constructor() {
+    this._init();
+  }
 
   public ngOnInit(): void {
     this._dialogRef.updateSize('600px');
-    this._fetchData();
-  }
-
-  public ngOnDestroy(): void {
-    this._destroy$.next(null);
-    this._destroy$.complete();
   }
 
   public save = () => {
-    return this._config.saveContentPage(this.contentPage)
+    return this._config.saveContentPage(this.contentPage())
       .pipe(
         tap((contentPage) => {
           this._message.success('Saved Changes');
@@ -81,28 +72,21 @@ export class ContentPageComponent implements OnInit, OnDestroy {
       );
   };
 
-  private _fetchData(): void {
+  private _init(): void {
+    this.contentPage.set({
+      ...this._data.contentPage,
+      path: this._data.contentPage.path || '/',
+    });
+
     this._config.loadContentLayouts()
-      .subscribe((contentLayouts) => {
-        this.contentLayouts = contentLayouts;
-        this._cdRef.markForCheck();
-      });
-
-    of(this._data.contentPage)
       .pipe(
-        switchMap((contentPage) => {
-          return of(contentPage);
-        }),
-        takeUntil(this._destroy$),
+        // The config answers with the { contentLayouts, paging } envelope
+        // (FsContentConfig.loadContentLayouts), so the select takes its array, not the
+        // envelope, which rendered no options at all (IEB-T294).
+        tap((response) => this.contentLayouts.set(response.contentLayouts)),
+        takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe((contentPage) => {
-        this.contentPage = {
-          ...contentPage,
-          path: contentPage.path || '/',
-        };
-
-        this._cdRef.markForCheck();
-      });
+      .subscribe();
   }
 
 }

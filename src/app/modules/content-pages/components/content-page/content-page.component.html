@@ -1,12 +1,12 @@
-<form fsForm [submit]="save" *fsSkeletonForm="contentPage">
+<form fsForm [submit]="save" *fsSkeletonForm="contentPage()">
   <fs-dialog>
-    <h1 mat-dialog-title>{{contentPage.id ? 'Page' : 'Create Page'}}</h1>
+    <h1 mat-dialog-title>{{contentPage().id ? 'Page' : 'Create Page'}}</h1>
     <div mat-dialog-content>
       <div class="fs-column">
         <mat-form-field>
           <mat-label>Type</mat-label>
           <mat-select
-            [(ngModel)]="contentPage.type"
+            [(ngModel)]="contentPage().type"
             name="type"
             required>
             @for (item of PageTypes; track item) {
@@ -17,14 +17,14 @@
             }
           </mat-select>
         </mat-form-field>
-        @if (contentLayouts) {
+        @if (contentLayouts()) {
           <mat-form-field>
             <mat-label>Layout</mat-label>
             <mat-select
-              [(ngModel)]="contentPage.contentLayoutId"
+              [(ngModel)]="contentPage().contentLayoutId"
               required
               name="contentLayoutId">
-              @for (item of contentLayouts; track item) {
+              @for (item of contentLayouts(); track item.id) {
                 <mat-option
                   [value]="item.id">
                   {{ item.name }}
@@ -37,7 +37,7 @@
           <mat-label>Name</mat-label>
           <input
             matInput
-            [(ngModel)]="contentPage.name"
+            [(ngModel)]="contentPage().name"
             name="name"
             required>
         </mat-form-field>
@@ -45,7 +45,7 @@
           <mat-label>Path</mat-label>
           <input
             matInput
-            [(ngModel)]="contentPage.path"
+            [(ngModel)]="contentPage().path"
             name="path"
             required>
         </mat-form-field>
@@ -53,7 +53,7 @@
           <mat-label>Title</mat-label>
           <input
             matInput
-            [(ngModel)]="contentPage.title"
+            [(ngModel)]="contentPage().title"
             name="title">
         </mat-form-field>
       </div>
