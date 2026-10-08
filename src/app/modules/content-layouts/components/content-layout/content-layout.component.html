@@ -1,13 +1,13 @@
-<form fsForm [submit]="save" *fsSkeletonForm="contentLayout">
+<form fsForm [submit]="save" *fsSkeletonForm="contentLayout()">
   <fs-dialog>
-    <h1 mat-dialog-title>{{contentLayout.id ? 'Layout' : 'Layout Page'}}</h1>
+    <h1 mat-dialog-title>{{contentLayout().id ? 'Layout' : 'Layout Page'}}</h1>
     <div mat-dialog-content>
       <div class="fs-column">
         <mat-form-field>
           <mat-label>Name</mat-label>
           <input
             matInput
-            [(ngModel)]="contentLayout.name"
+            [(ngModel)]="contentLayout().name"
             name="name"
             required>
         </mat-form-field>
@@ -15,7 +15,7 @@
           <mat-label>Tag</mat-label>
           <input
             matInput
-            [(ngModel)]="contentLayout.tag"
+            [(ngModel)]="contentLayout().tag"
             name="tag">
         </mat-form-field>
       </div>

@@ -1,15 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions } from '@angular/material/dialog';
 
 import { FsMessage } from '@firestitch/message';
-import { FsTextEditorComponent } from '@firestitch/text-editor';
 
-import { Subject, of } from 'rxjs';
-import { switchMap, takeUntil, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 import { FS_CONTENT_CONFIG } from '../../../../injectors';
-import { FsContentConfig } from '../../../../interfaces';
+import { FsContentConfig, FsContentLayout } from '../../../../interfaces';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 import { FormsModule } from '@angular/forms';
 import { FsFormModule } from '@firestitch/form';
@@ -38,33 +36,25 @@ import { MatInput } from '@angular/material/input';
         MatDialogActions,
     ],
 })
-export class ContentLayoutComponent implements OnInit, OnDestroy {
+export class ContentLayoutComponent {
+
+  public contentLayout = signal<FsContentLayout>(null);
+
   private _config = inject<FsContentConfig>(FS_CONTENT_CONFIG);
   private _data = inject(MAT_DIALOG_DATA);
   private _dialogRef = inject<MatDialogRef<ContentLayoutComponent>>(MatDialogRef);
   private _message = inject(FsMessage);
-  private _cdRef = inject(ChangeDetectorRef);
 
-
-  @ViewChildren(FsTextEditorComponent)
-  public textEditors: QueryList<FsTextEditorComponent>;
-
-  public contentLayout = null;
-  public editors = { content: true, styles: true };
-
-  private _destroy$ = new Subject<void>();
-
-  public ngOnInit(): void {
-    this._fetchData();
-  }
-
-  public ngOnDestroy(): void {
-    this._destroy$.next(null);
-    this._destroy$.complete();
+  constructor() {
+    this._init();
   }
 
   public save = () => {
-    return this._config.saveContentLayout(this.contentLayout)
+    // Only the fields this dialog edits. Sending the whole layout re-sent the Layout Editor's
+    // copy of content and styles, which the server wrote over edits saved since (IEB-T292).
+    const { id, name, tag } = this.contentLayout();
+
+    return this._config.saveContentLayout({ id, name, tag })
       .pipe(
         tap((contentLayout) => {
           this._message.success('Saved Changes');
@@ -73,19 +63,8 @@ export class ContentLayoutComponent implements OnInit, OnDestroy {
       );
   };
 
-  private _fetchData(): void {
-    of(this._data.contentLayout)
-      .pipe(
-        switchMap((contentLayout) => {
-          return of(contentLayout);
-        }),
-        takeUntil(this._destroy$),
-      )
-      .subscribe((contentLayout) => {
-        this.contentLayout = { ...contentLayout };
-
-        this._cdRef.markForCheck();
-      });
+  private _init(): void {
+    this.contentLayout.set({ ...this._data.contentLayout });
   }
 
 }

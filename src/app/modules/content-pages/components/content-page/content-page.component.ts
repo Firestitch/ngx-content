@@ -63,7 +63,11 @@ export class ContentPageComponent implements OnInit {
   }
 
   public save = () => {
-    return this._config.saveContentPage(this.contentPage())
+    // Only the fields this dialog edits. Sending the whole page re-sent the Page Editor's copy
+    // of content, styles and js, which the server wrote over edits saved since (IEB-T292).
+    const { id, type, contentLayoutId, name, path, title } = this.contentPage();
+
+    return this._config.saveContentPage({ id, type, contentLayoutId, name, path, title })
       .pipe(
         tap((contentPage) => {
           this._message.success('Saved Changes');

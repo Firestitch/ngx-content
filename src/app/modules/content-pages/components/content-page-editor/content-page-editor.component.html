@@ -1,24 +1,24 @@
 <form fsForm [submit]="submitted" [dirtySubmitButton]="false" [confirm]="false">
-  <fs-dialog *fsSkeletonForm="contentPage">
+  <fs-dialog *fsSkeletonForm="contentPage()">
     <h1 mat-dialog-title>
       <div class="title-container">
         <div class="title">
           Page Editor
-          <div class="small">{{contentPage.name}}</div>
+          <div class="small">{{contentPage().name}}</div>
         </div>
 
         <div class="toggles">
           <app-editor-toggles
-            [editors]="editors"
+            [editors]="editors()"
             [showJs]="true"
             (toggleChange)="editorToggleChange($event)">
           </app-editor-toggles>
         </div>
 
         <app-editor-actions
-          [saveDisabled]="!editor?.hasChanges || submitting"
+          [saveDisabled]="!editor()?.hasChanges() || editor()?.saving()"
           [isMac]="isMac"
-          [previewPath]="contentPage.path"
+          [previewPath]="contentPage().path"
           (settings)="openSettings()"
           (save)="save()"
           (preview)="openPreview()"
@@ -29,14 +29,13 @@
     <div mat-dialog-content>
       <app-editor
         [contentConfig]="config"
-        [showHtml]="editors.html"
-        [showJs]="editors.js"
-        [showScss]="editors.scss"
-        [showGlobalScss]="editors.globalScss"
-        [html]="contentPage.content"
-        [scss]="contentPage.styles"
-        [js]="contentPage.js"
-        (focused)="editorFocused($event)">
+        [showHtml]="editors().html"
+        [showJs]="editors().js"
+        [showScss]="editors().scss"
+        [showGlobalScss]="editors().globalScss"
+        [html]="contentPage().content"
+        [scss]="contentPage().styles"
+        [js]="contentPage().js">
       </app-editor>
     </div>
   </fs-dialog>

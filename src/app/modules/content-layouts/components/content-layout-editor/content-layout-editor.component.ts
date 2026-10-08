@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 
 import { CdkScrollable } from '@angular/cdk/scrolling';
@@ -7,17 +16,15 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogContent, MatDialogRef, MatDialogTi
 
 import { FsDialogModule } from '@firestitch/dialog';
 import { FsFormModule } from '@firestitch/form';
-import { FsMessage } from '@firestitch/message';
 import { FsPrompt } from '@firestitch/prompt';
 import { FsSkeletonModule } from '@firestitch/skeleton';
 
-import { Subject, fromEvent, of, throwError } from 'rxjs';
-import { filter, finalize, switchMap, takeUntil, tap } from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
+import { filter, tap } from 'rxjs/operators';
 
 import { EditorType } from '../../../../enums';
-import { FsContentConfig } from '../../../../interfaces';
-import { EditorComponent } from '../../../editor/components/editor';
-import { EditorComponent as EditorComponent_1 } from '../../../editor/components/editor/editor.component';
+import { FsContentConfig, FsContentLayout } from '../../../../interfaces';
+import { EditorComponent } from '../../../editor/components/editor/editor.component';
 import { EditorTogglesComponent } from '../../../editor/components/editor-toggles';
 import { EditorActionsComponent } from '../../../editor/components/editor-actions';
 import { ContentLayoutComponent } from '../content-layout/content-layout.component';
@@ -38,72 +45,50 @@ import { ContentLayoutComponent } from '../content-layout/content-layout.compone
     EditorActionsComponent,
     CdkScrollable,
     MatDialogContent,
-    EditorComponent_1,
+    EditorComponent,
   ],
 })
-export class ContentLayoutEditorComponent implements OnInit, OnDestroy {
+export class ContentLayoutEditorComponent implements OnInit {
 
-  @ViewChild(EditorComponent)
-  public editor: EditorComponent;
-
-  public contentLayout: {
-    id?: number;
-    styles?: string;
-    content?: string;
-    name?: string;
-  };
+  public editor = viewChild(EditorComponent);
+  public contentLayout = signal<FsContentLayout>(null);
 
   public get isMac(): boolean {
     return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
   }
 
-  public submitting: boolean;
-
   public config: FsContentConfig;
   public EditorType = EditorType;
-  public focused = null;
-  public title;
-  public editors = {
+  public editors = signal({
     [EditorType.Html]: true,
     [EditorType.Scss]: true,
     [EditorType.GlobalScss]: false,
-  };
+  });
 
-  private _destroy$ = new Subject<void>();
+  public submitted = () => this.editor().save$(
+    {
+      [EditorType.Html]: 'content',
+      [EditorType.Scss]: 'styles',
+    },
+    (values) => this.config.saveContentLayout({ id: this.contentLayout().id, ...values }),
+  );
+
   private _data = inject(MAT_DIALOG_DATA);
   private _dialogRef = inject<MatDialogRef<ContentLayoutEditorComponent>>(MatDialogRef);
-  private _message = inject(FsMessage);
   private _dialog = inject(MatDialog);
-  private _cdRef = inject(ChangeDetectorRef);
   private _prompt = inject(FsPrompt);
+  private _destroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
     this._dialogRef.addPanelClass('fs-content-editor-overlay-pane');
     this._dialogRef.disableClose = true;
     this.config = this._data.contentConfig;
-    this._initContentLayout(this._data.contentLayout);
+    this._initContentLayout();
     this._initEscape();
   }
 
   public editorToggleChange(event: MatButtonToggleChange): void {
-    this.editors[event.value] = !this.editors[event.value];
-  }
-
-  public ngOnDestroy(): void {
-    this._destroy$.next(null);
-    this._destroy$.complete();
-  }
-
-  public _initContentLayout(contentLayout) {
-    this.config.loadContentLayout(contentLayout.id)
-      .subscribe((data) => {
-        this.contentLayout = data;
-        this._cdRef.markForCheck();
-      });
-  }
-
-  public editorFocused(type) {
-    this.focused = type;
+    this.editors.update((editors) => ({ ...editors, [event.value]: !editors[event.value] }));
   }
 
   public save(): void {
@@ -111,58 +96,8 @@ export class ContentLayoutEditorComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  public submitted = () => {
-    this.submitting = true;
-
-    return of(null)
-      .pipe(
-        filter(() => this.focused),
-        switchMap(() => {
-          switch (this.focused) {
-            case EditorType.Html:
-            case EditorType.Scss:
-              return this.saveContentPage();
-            case EditorType.GlobalScss:
-              return this.editor.saveGlobalScss();
-          }
-
-          return throwError('Invalid focus');
-        }),
-        tap(() => {
-          this.editor.clearChange(this.focused);
-          this._cdRef.markForCheck();
-        }),
-        finalize(() => {
-          this.submitting = false;
-          this._cdRef.markForCheck();
-        }),
-      );
-  };
-
-  public saveContentPage() {
-    const names = {
-      [EditorType.Scss]: 'styles',
-      [EditorType.Html]: 'content',
-    };
-
-    const data = {
-      id: this.contentLayout.id,
-      [names[this.focused]]: this.editor.changes[this.focused],
-    };
-
-    return this.config.saveContentLayout({
-      id: this.contentLayout.id,
-      ...data,
-    })
-      .pipe(
-        tap(() => {
-          this._message.success('Saved Changes');
-        }),
-      );
-  }
-
   public close(): void {
-    if (!this.editor.hasChanges) {
+    if (!this.editor()?.hasChanges()) {
       return this._dialogRef.close();
     }
 
@@ -184,45 +119,58 @@ export class ContentLayoutEditorComponent implements OnInit, OnDestroy {
       ],
     })
       .pipe(
-        takeUntil(this._destroy$),
+        filter((value) => value === 'discard'),
+        tap(() => this._dialogRef.close()),
+        takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe((value) => {
-        if (value === 'discard') {
-          this._dialogRef.close();
-        }
-      });
+      .subscribe();
   }
 
   public openSettings(): void {
     this._dialog.open(ContentLayoutComponent, {
       data: {
-        contentLayout: this.contentLayout,
+        contentLayout: this.contentLayout(),
       },
     })
       .afterClosed()
       .pipe(
-        takeUntil(this._destroy$),
+        filter((contentLayout) => !!contentLayout),
+        // Only what the settings dialog edits. Merging content/styles from its response would
+        // push them through [html]/[scss] into the editors and wipe unsaved typing (IEB-T292).
+        tap((contentLayout: FsContentLayout) => {
+          this.contentLayout.update((current) => ({
+            ...current,
+            name: contentLayout.name,
+            tag: contentLayout.tag,
+          }));
+        }),
+        takeUntilDestroyed(this._destroyRef),
       )
-      .subscribe((contentLayout) => {
-        this.contentLayout = {
-          ...this.contentLayout,
-          ...contentLayout,
-        };
-        this._cdRef.markForCheck();
-      });
+      .subscribe();
+  }
+
+  private _initContentLayout(): void {
+    this.config.loadContentLayout(this._data.contentLayout.id)
+      .pipe(
+        tap((contentLayout) => this.contentLayout.set(contentLayout)),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
   }
 
   private _initEscape(): void {
     fromEvent(document, 'keydown')
       .pipe(
         filter((event: KeyboardEvent) => event.code === 'Escape'),
-        takeUntil(this._destroy$),
-      ).subscribe(() => {
-        const dialogRef = this._dialog.openDialogs.reverse()[0];
-        if (dialogRef?.componentInstance === this) {
-          this.close();
-        }
-      });
+        tap(() => {
+          const dialogRef = this._dialog.openDialogs.reverse()[0];
+          if (dialogRef?.componentInstance === this) {
+            this.close();
+          }
+        }),
+        takeUntilDestroyed(this._destroyRef),
+      )
+      .subscribe();
   }
 
 }

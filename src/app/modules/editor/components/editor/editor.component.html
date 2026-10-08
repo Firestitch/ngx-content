@@ -1,68 +1,60 @@
-<as-split [unit]="'percent'" [gutterSize]="25"> 
-  <as-split-area [size]="70" [visible]="showHtml" [order]="1">
+<as-split [unit]="'percent'" [gutterSize]="25">
+  <as-split-area [size]="70" [visible]="showHtml()" [order]="1">
     <div class="editor-container">
       <app-editor-label
-          [changed]="changes.html !== undefined"
-          [focused]="focusedArea === 'html'">
+          [changed]="changedTypes().includes(EditorType.Html)"
+          [focused]="focusedArea() === EditorType.Html">
         HTML
       </app-editor-label>
-      <fs-text-editor 
-        [(ngModel)]="html" 
+      <fs-text-editor
+        [(ngModel)]="html"
         name="html"
-        [fsModelChangeOptions]="{ debounce: 0 }"
-        (fsModelChange)="change(EditorType.Html, $event)"
         [config]="htmlConfig">
-      </fs-text-editor>              
+      </fs-text-editor>
     </div>
   </as-split-area>
-  <as-split-area [size]="30" [visible]="showScss" [order]="2">
+  <as-split-area [size]="30" [visible]="showScss()" [order]="2">
     <div class="editor-container">
       <app-editor-label
-          [changed]="changes.scss !== undefined"
-          [focused]="focusedArea === 'scss'">
+          [changed]="changedTypes().includes(EditorType.Scss)"
+          [focused]="focusedArea() === EditorType.Scss">
         SCSS
       </app-editor-label>
-      <fs-text-editor 
-        [(ngModel)]="scss" 
+      <fs-text-editor
+        [(ngModel)]="scss"
         name="scss"
-        [fsModelChangeOptions]="{ debounce: 0 }"
-        (fsModelChange)="change(EditorType.Scss, $event)"
         [config]="scssConfig">
-      </fs-text-editor>    
+      </fs-text-editor>
     </div>
   </as-split-area>
-  <as-split-area [size]="30"  [visible]="showJs" [order]="3">
+  <as-split-area [size]="30"  [visible]="showJs()" [order]="3">
     <div class="editor-container">
       <app-editor-label
-          [changed]="changes.js !== undefined"
-          [focused]="focusedArea === 'js'">
+          [changed]="changedTypes().includes(EditorType.Js)"
+          [focused]="focusedArea() === EditorType.Js">
         JS
       </app-editor-label>
-      <fs-text-editor 
-        [(ngModel)]="js" 
+      <fs-text-editor
+        [(ngModel)]="js"
         name="js"
-        [fsModelChangeOptions]="{ debounce: 0 }"
-        (fsModelChange)="change(EditorType.Js, $event)"
         [config]="jsConfig">
-      </fs-text-editor>    
+      </fs-text-editor>
     </div>
   </as-split-area>
-  <as-split-area [size]="30" [visible]="showGlobalScss" [order]="4">
+  <as-split-area [size]="30" [visible]="showGlobalScss()" [order]="4">
     <div class="editor-container">
       <app-editor-label
-          [changed]="changes.globalScss !== undefined"
-          [focused]="focusedArea === 'globalScss'">
+          [changed]="changedTypes().includes(EditorType.GlobalScss)"
+          [focused]="focusedArea() === EditorType.GlobalScss">
         Global SCSS
       </app-editor-label>
-      <ng-container *fsSkeleton="contentStyle">
-        <fs-text-editor 
-          [(ngModel)]="contentStyle.scss" 
+      <ng-container *fsSkeleton="contentStyle()">
+        <fs-text-editor
+          [(ngModel)]="globalScss"
           name="globalScss"
-          [fsModelChangeOptions]="{ debounce: 300 }"
-          (fsModelChange)="change(EditorType.GlobalScss, $event)"
           [config]="globalScssConfig">
-        </fs-text-editor> 
-      </ng-container>   
+        </fs-text-editor>
+      </ng-container>
     </div>
   </as-split-area>
 </as-split>
